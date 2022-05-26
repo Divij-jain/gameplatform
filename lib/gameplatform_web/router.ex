@@ -6,7 +6,7 @@ defmodule GameplatformWeb.Router do
     plug :fetch_session
     plug :fetch_live_flash
     plug :put_root_layout, {GameplatformWeb.LayoutView, :root}
-    plug :protect_from_forgery
+    # plug :protect_from_forgery TO ON LATER
     plug :put_secure_browser_headers
   end
 
@@ -21,9 +21,15 @@ defmodule GameplatformWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", GameplatformWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", GameplatformWeb do
+    pipe_through :api
+
+    scope "/user" do
+      # to remove later of show login page
+      post "/getOtp", UserController, :get_otp
+      post "/submitotp", UserController, :submit_otp
+    end
+  end
 
   # Enables LiveDashboard only for development
   #

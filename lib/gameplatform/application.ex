@@ -7,6 +7,17 @@ defmodule Gameplatform.Application do
 
   @impl true
   def start(_type, _args) do
+    # isolated_children = [
+    #   {Redix, sync_connect: true, exit_on_disconnection: true},
+    #   MyApp.MyGenServer
+    # ]
+
+    # isolated_supervisor = %{
+    #   id: MyChildSupervisor,
+    #   type: :supervisor,
+    #   start: {Supervisor, :start_link, [isolated_children, [strategy: :rest_for_one]]},
+    # }
+
     children = [
       # Start the Ecto repository
       Gameplatform.Repo,
@@ -15,7 +26,10 @@ defmodule Gameplatform.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Gameplatform.PubSub},
       # Start the Endpoint (http/https)
-      GameplatformWeb.Endpoint
+      GameplatformWeb.Endpoint,
+      # Redix pool supervisor
+      GamePlatform.RedixSupervisor
+      # isolated_supervisor
       # Start a worker by calling: Gameplatform.Worker.start_link(arg)
       # {Gameplatform.Worker, arg}
     ]
