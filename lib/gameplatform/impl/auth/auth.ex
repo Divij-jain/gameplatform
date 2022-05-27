@@ -20,9 +20,11 @@ defmodule Gameplatform.Impl.Auth.Auth do
     country_code = Map.get(params, "country_code")
     to_number = "#{country_code}#{mobile_number}"
     otp = Map.get(params, "otp")
+    IO.inspect(otp)
 
     case check_for_an_existing_otp(to_number) do
       {:ok, code} when code != nil ->
+        IO.inspect(code)
         otp == code
 
       {:ok, nil} ->
@@ -51,9 +53,10 @@ defmodule Gameplatform.Impl.Auth.Auth do
     "Your verification code for Platform is #{code}"
   end
 
-  defp send_message_to_client(to_number, code) do
-    body = create_body(code)
-    Gameplatform.Client.TwilioClient.send_sms(to_number, body)
+  defp send_message_to_client(_to_number, code) do
+    # body = create_body(code)
+    # Gameplatform.Client.TwilioClient.send_sms(to_number, body)
+    {:ok, %{otp: code}}
   end
 
   defp maybe_sent_otp_to_client(to_number) do

@@ -7,8 +7,8 @@ defmodule GameplatformWeb.UserController do
 
   def get_otp(conn, params) do
     case Auth.send_otp_to_user(params) do
-      {:ok, _} ->
-        json(conn, %{})
+      {:ok, body} ->
+        json(conn, body)
 
       {:error, status_code, error} ->
         conn
@@ -18,19 +18,31 @@ defmodule GameplatformWeb.UserController do
   end
 
   def submit_otp(conn, params) do
+    IO.inspect(params)
+
     case Auth.verify_otp(params) do
       true ->
         case Account.register_user(params) do
           {:ok, user} ->
+            IO.inspect(user)
+
             conn
-            |> put_flash(:info, "User Registered successfully.")
-            |> UserAuth.log_in_user(user)
+            |> UserAuth.log_in_user(user, %{"remember_me" => "true"})
+
+          _ ->
+            conn
         end
 
       {:error_, _status_code, _error} ->
-        :ok
-    end
+        conn
 
-    conn
+      _ ->
+        conn
+    end
+  end
+
+  def log_out(conn, _params) do
+    IO.inspect(conn, label: "log_out")
+    UserAuth.log_out_user(conn)
   end
 end

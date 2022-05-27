@@ -52,7 +52,8 @@ defmodule Gameplatform.MixProject do
       {:tesla, "~> 1.4.0"},
       {:mox, "~> 1.0", only: :test},
       {:redix, "~> 1.1"},
-      {:nimble_totp, "~> 0.1.0"}
+      {:nimble_totp, "~> 0.1.0"},
+      {:joken, "~> 2.4"}
     ]
   end
 

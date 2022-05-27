@@ -6,5 +6,6 @@ defmodule Gameplatform.Account do
     attrs
     |> User.build()
     |> Repo.insert()
+    |> IO.inspect(label: "insert")
   end
 end

@@ -5,7 +5,7 @@ defmodule Gameplatform.Accounts.Changesets.User do
 
   def build(user \\ %User{}, attrs) do
     user
-    |> cast(attrs, [:mobile_number, :country_code])
-    |> validate_required([:mobile_number, :country_code])
+    |> cast(attrs, [:phone_number, :country_code])
+    |> validate_required([:phone_number, :country_code])
   end
 end

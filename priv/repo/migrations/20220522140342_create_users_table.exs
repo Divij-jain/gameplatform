@@ -3,7 +3,7 @@ defmodule Gameplatform.Repo.Migrations.CreateUsersTable do
 
   def change do
     create table(:users) do
-      add :mobile_number, :string, null: false
+      add :phone_number, :string, null: false
       add :country_code, :string, null: false
 
       add :created_at, :utc_datetime_usec,

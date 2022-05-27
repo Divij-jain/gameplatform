@@ -89,3 +89,5 @@ config :gameplatform, Gameplatform.Client.TwilioClient,
   twilio_account_sid: System.get_env("TWILIO_ACCOUNT_SID"),
   twilio_auth_token: System.get_env("TWILIO_AUTH_TOKEN"),
   messaging_service_sid: System.get_env("MESSAGING_SERVICE_SID")
+
+config :joken, default_signer: System.get_env("AUTH_KEY")
