@@ -8,7 +8,6 @@ defmodule GameplatformWeb.Router do
     plug :fetch_session
     plug :fetch_live_flash
     plug :put_root_layout, {GameplatformWeb.LayoutView, :root}
-    # TO ON LATER
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_user

@@ -1,7 +1,7 @@
 defmodule GameplatformWeb.UserController do
   use GameplatformWeb, :controller
 
-  alias Gameplatform.Impl.Auth.Auth
+  alias Gameplatform.Auth
   alias Gameplatform.Account
   alias GameplatformWeb.Auth.UserAuth
 
@@ -18,8 +18,6 @@ defmodule GameplatformWeb.UserController do
   end
 
   def submit_otp(conn, params) do
-    IO.inspect(params)
-
     case Auth.verify_otp(params) do
       true ->
         case Account.register_user(params) do
