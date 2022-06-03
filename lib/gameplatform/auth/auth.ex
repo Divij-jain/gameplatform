@@ -21,14 +21,17 @@ defmodule Gameplatform.Auth do
     to_number = get_user_phone_number(params)
     otp = Map.get(params, "otp")
 
-    case check_for_an_existing_otp(to_number) do
-      {:ok, code} when code != nil ->
-        otp == code
-
+    with {:ok, code} when code != nil <- check_for_an_existing_otp(to_number),
+         true <- otp == code do
+      {:ok, true}
+    else
       {:ok, nil} ->
         {:error, 400, "OTP Expired try sending a new one"}
 
-      _error ->
+      false ->
+        {:error, 400, "Invalid OTP try again"}
+
+      {:error, _} ->
         {:error, 500, "Internal Server Error"}
     end
   end

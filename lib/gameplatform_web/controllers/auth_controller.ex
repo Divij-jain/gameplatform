@@ -1,4 +1,4 @@
-defmodule GameplatformWeb.UserController do
+defmodule GameplatformWeb.AuthController do
   use GameplatformWeb, :controller
 
   alias Gameplatform.Auth
@@ -18,29 +18,24 @@ defmodule GameplatformWeb.UserController do
   end
 
   def submit_otp(conn, params) do
-    case Auth.verify_otp(params) do
-      true ->
-        case Account.register_user(params) do
-          {:ok, user} ->
-            IO.inspect(user)
-
-            conn
-            |> UserAuth.log_in_user(user, %{"remember_me" => "true"})
-
-          _ ->
-            conn
-        end
-
-      {:error_, _status_code, _error} ->
+    with {:ok, true} <- Auth.verify_otp(params),
+         {:ok, user} <- Account.get_current_user(params) do
+      conn
+      |> UserAuth.log_in_user(user, %{"remember_me" => "true"})
+    else
+      {:error, status_code, error} ->
         conn
+        |> put_status(status_code)
+        |> json(%{errors: error})
 
       _ ->
         conn
+        |> put_status(500)
+        |> json(%{error: "to parse changeset and check error code"})
     end
   end
 
   def log_out(conn, _params) do
-    IO.inspect(conn, label: "log_out")
     UserAuth.log_out_user(conn)
   end
 end

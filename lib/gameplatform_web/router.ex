@@ -31,9 +31,9 @@ defmodule GameplatformWeb.Router do
 
     scope "/user" do
       # to remove later of show login page
-      post "/getOtp", UserController, :get_otp
-      post "/submitotp", UserController, :submit_otp
-      post "/logout", UserController, :log_out
+      post "/getOtp", AuthController, :get_otp
+      post "/submitotp", AuthController, :submit_otp
+      post "/logout", AuthController, :log_out
     end
   end
 
