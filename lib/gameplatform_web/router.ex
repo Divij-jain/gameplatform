@@ -1,7 +1,7 @@
 defmodule GameplatformWeb.Router do
   use GameplatformWeb, :router
 
-  import GameplatformWeb.Auth.UserAuth
+  import GameplatformWeb.Plugs.UserAuth
 
   pipeline :browser do
     plug :accepts, ["html"]

@@ -1,34 +1,26 @@
-defmodule GameplatformWeb.Auth.UserAuth do
+defmodule GameplatformWeb.Plugs.UserAuth do
   import Plug.Conn
-  import Phoenix.Controller
 
   @max_age 60 * 60 * 24 * 60
   @remember_me_cookie "_gameplatform_web_user_remember_me"
   @remember_me_options [sign: true, max_age: @max_age, same_site: "Lax"]
 
-  alias GameplatformWeb.Auth.TokenClient
+  alias Gameplatform.Auth.Token.TokenClient
 
   def log_in_user(conn, user, params \\ %{}) do
     token = TokenClient.create_new_token(user)
-
-    IO.inspect(conn, label: "log_in_user")
 
     conn
     |> renew_session()
     |> put_session(:user_token, token)
     |> maybe_write_remember_me_cookie(token, params)
-    |> json(%{result: "success"})
+
   end
 
   def log_out_user(conn) do
-    # user_token = get_session(conn, :user_token)
-    # user_token && Accounts.delete_session_token(user_token)
-
     conn
     |> renew_session()
     |> delete_resp_cookie(@remember_me_cookie)
-    |> json(%{})
-    |> IO.inspect(label: "log_out_user")
   end
 
   def fetch_current_user(conn, _opts) do

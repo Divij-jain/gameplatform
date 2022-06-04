@@ -1,5 +1,5 @@
-defmodule GameplatformWeb.Auth.TokenClient do
-  alias GameplatformWeb.Auth.Token
+defmodule Gameplatform.Auth.Token.TokenClient do
+  alias Gameplatform.Auth.Token
 
   def create_new_token(user) do
     claims = %{"user_id" => user.id}

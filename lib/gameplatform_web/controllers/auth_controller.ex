@@ -3,7 +3,7 @@ defmodule GameplatformWeb.AuthController do
 
   alias Gameplatform.Auth
   alias Gameplatform.Account
-  alias GameplatformWeb.Auth.UserAuth
+  alias GameplatformWeb.Plugs.UserAuth, as: AuthPlug
 
   def get_otp(conn, params) do
     case Auth.send_otp_to_user(params) do
@@ -21,7 +21,8 @@ defmodule GameplatformWeb.AuthController do
     with {:ok, true} <- Auth.verify_otp(params),
          {:ok, user} <- Account.get_current_user(params) do
       conn
-      |> UserAuth.log_in_user(user, %{"remember_me" => "true"})
+      |> AuthPlug.log_in_user(user, %{"remember_me" => "true"})
+      |> json(%{result: "success"})
     else
       {:error, status_code, error} ->
         conn
@@ -36,6 +37,8 @@ defmodule GameplatformWeb.AuthController do
   end
 
   def log_out(conn, _params) do
-    UserAuth.log_out_user(conn)
+    conn
+    |> AuthPlug.log_out_user()
+    |> json(%{})
   end
 end
