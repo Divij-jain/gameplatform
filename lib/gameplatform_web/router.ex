@@ -1,14 +1,13 @@
 defmodule GameplatformWeb.Router do
   use GameplatformWeb, :router
 
-  import GameplatformWeb.Auth.UserAuth
+  import GameplatformWeb.Plugs.UserAuth
 
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_live_flash
     plug :put_root_layout, {GameplatformWeb.LayoutView, :root}
-    # TO ON LATER
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_user
@@ -32,9 +31,9 @@ defmodule GameplatformWeb.Router do
 
     scope "/user" do
       # to remove later of show login page
-      post "/getOtp", UserController, :get_otp
-      post "/submitotp", UserController, :submit_otp
-      post "/logout", UserController, :log_out
+      post "/getOtp", AuthController, :get_otp
+      post "/submitotp", AuthController, :submit_otp
+      post "/logout", AuthController, :log_out
     end
   end
 

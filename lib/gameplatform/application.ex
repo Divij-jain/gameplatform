@@ -3,20 +3,12 @@ defmodule Gameplatform.Application do
   # for more information on OTP Applications
   @moduledoc false
 
+  alias Gameplatform.Cache.ApiToConfig
   use Application
 
   @impl true
   def start(_type, _args) do
-    # isolated_children = [
-    #   {Redix, sync_connect: true, exit_on_disconnection: true},
-    #   MyApp.MyGenServer
-    # ]
-
-    # isolated_supervisor = %{
-    #   id: MyChildSupervisor,
-    #   type: :supervisor,
-    #   start: {Supervisor, :start_link, [isolated_children, [strategy: :rest_for_one]]},
-    # }
+    caching_supervisor = ApiToConfig.get_caching_service()
 
     children = [
       # Start the Ecto repository
@@ -28,7 +20,7 @@ defmodule Gameplatform.Application do
       # Start the Endpoint (http/https)
       GameplatformWeb.Endpoint,
       # Redix pool supervisor
-      GamePlatform.RedixSupervisor
+      caching_supervisor
       # isolated_supervisor
       # Start a worker by calling: Gameplatform.Worker.start_link(arg)
       # {Gameplatform.Worker, arg}
