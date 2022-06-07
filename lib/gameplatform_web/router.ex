@@ -17,12 +17,17 @@ defmodule GameplatformWeb.Router do
     plug :accepts, ["json"]
     plug :fetch_session
     plug :fetch_current_user
+    plug OpenApiSpex.Plug.PutApiSpec, module: GameplatformWeb.ApiSpec
   end
 
   scope "/", GameplatformWeb do
     pipe_through :browser
-
     get "/", PageController, :index
+  end
+
+  scope "/" do
+    pipe_through :browser
+    get "/swaggerui", OpenApiSpex.Plug.SwaggerUI, path: "/api/openapi"
   end
 
   # Other scopes may use custom stacks.
@@ -30,11 +35,15 @@ defmodule GameplatformWeb.Router do
     pipe_through :api
 
     scope "/user" do
-      # to remove later of show login page
       post "/getOtp", AuthController, :get_otp
-      post "/submitotp", AuthController, :submit_otp
-      post "/logout", AuthController, :log_out
+      # post "/submitotp", AuthController, :submit_otp
+      # post "/logout", AuthController, :log_out
     end
+  end
+
+  scope "/api" do
+    pipe_through :api
+    get "/openapi", OpenApiSpex.Plug.RenderSpec, []
   end
 
   # Enables LiveDashboard only for development

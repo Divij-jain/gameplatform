@@ -1,9 +1,37 @@
 defmodule GameplatformWeb.AuthController do
   use GameplatformWeb, :controller
 
+  import OpenApiSpex.Operation, only: [parameter: 5, request_body: 4, response: 3]
+
+  alias OpenApiSpex.Operation
   alias Gameplatform.Auth
   alias Gameplatform.Account
+  alias GameplatformWeb.ApiSpec.AuthSchema
   alias GameplatformWeb.Plugs.UserAuth, as: AuthPlug
+
+  def open_api_operation(action) do
+    apply(__MODULE__, :"#{action}_operation", [])
+  end
+
+  def get_otp_operation() do
+    %Operation{
+      tags: ["auth"],
+      summary: "send otp to user",
+      description: "Send Otp to users",
+      operationId: "AuthController.get_otp",
+      requestBody:
+        request_body(
+          "The getOtp request attributes",
+          "application/json",
+          AuthSchema.GetOtpRequest,
+          required: true
+        ),
+      responses: %{
+        201 =>
+          response("Request submitted Response", "application/json", AuthSchema.RequestSubmitted)
+      }
+    }
+  end
 
   def get_otp(conn, params) do
     case Auth.send_otp_to_user(params) do

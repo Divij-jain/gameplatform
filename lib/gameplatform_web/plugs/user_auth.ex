@@ -14,7 +14,6 @@ defmodule GameplatformWeb.Plugs.UserAuth do
     |> renew_session()
     |> put_session(:user_token, token)
     |> maybe_write_remember_me_cookie(token, params)
-
   end
 
   def log_out_user(conn) do
