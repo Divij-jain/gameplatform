@@ -36,8 +36,8 @@ defmodule GameplatformWeb.Router do
 
     scope "/user" do
       post "/getOtp", AuthController, :get_otp
-      # post "/submitotp", AuthController, :submit_otp
-      # post "/logout", AuthController, :log_out
+      post "/submitotp", AuthController, :submit_otp
+      post "/logout", AuthController, :log_out
     end
   end
 

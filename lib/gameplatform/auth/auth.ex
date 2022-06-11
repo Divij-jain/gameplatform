@@ -51,8 +51,8 @@ defmodule Gameplatform.Auth do
   end
 
   defp get_user_phone_number(params) do
-    mobile_number = Map.get(params, "phone_number")
-    country_code = Map.get(params, "country_code")
+    mobile_number = Map.get(params, :phone_number)
+    country_code = Map.get(params, :country_code)
     "#{country_code}#{mobile_number}"
   end
 
