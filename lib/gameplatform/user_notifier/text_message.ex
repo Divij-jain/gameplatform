@@ -1,7 +1,5 @@
 defmodule Gameplatform.UserNotifier.TextMessage do
-  alias Gameplatform.Client.TwilioClient
+  @text_client Application.compile_env(:gameplatform, [__MODULE__, :client])
 
-  def send_text_message_to_user(to_number, body) do
-    TwilioClient.send_sms(to_number, body)
-  end
+  def send_text_message_to_user(to_number, body), do: @text_client.send_sms(to_number, body)
 end

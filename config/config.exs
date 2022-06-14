@@ -57,6 +57,9 @@ config :gameplatform, Gameplatform.Cache.ApiToConfig,
 config :gameplatform, Gameplatform.UserNotifier,
   text_client: Gameplatform.UserNotifier.TextMessage
 
+config :gameplatform, Gameplatform.UserNotifier.TextMessage,
+  client: Gameplatform.Client.TwilioClient
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

@@ -1,6 +1,8 @@
 defmodule Gameplatform.Client.TwilioClient do
   use Tesla
 
+  @callback send_sms(String.t(), String.t()) :: {:ok, map()} | {:error, any()}
+
   plug Tesla.Middleware.FollowRedirects
   plug Tesla.Middleware.FormUrlencoded
   plug Tesla.Middleware.JSON, engine: Jason
