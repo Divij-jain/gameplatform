@@ -23,11 +23,11 @@ defmodule GameplatformWeb.Plugs.UserAuth do
   end
 
   def fetch_current_user(conn, _opts) do
-    IO.inspect(conn, label: "fetch_current_user")
+    # IO.inspect(conn, label: "fetch_current_user")
     {user_token, conn} = ensure_user_token(conn)
-    IO.inspect(user_token, label: "user_token")
+    # IO.inspect(user_token, label: "user_token")
     user_data = user_token && TokenClient.get_user_id_by_jwt_token(user_token)
-    IO.inspect(user_data, label: "user_data")
+    # IO.inspect(user_data, label: "user_data")
     assign(conn, :current_user, user_data)
   end
 
