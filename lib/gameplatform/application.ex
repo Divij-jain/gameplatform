@@ -3,10 +3,13 @@ defmodule Gameplatform.Application do
   # for more information on OTP Applications
   @moduledoc false
 
+  alias Gameplatform.Cache.ApiToConfig
   use Application
 
   @impl true
   def start(_type, _args) do
+    caching_supervisor = ApiToConfig.get_caching_service()
+
     children = [
       # Start the Ecto repository
       Gameplatform.Repo,
@@ -15,7 +18,10 @@ defmodule Gameplatform.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Gameplatform.PubSub},
       # Start the Endpoint (http/https)
-      GameplatformWeb.Endpoint
+      GameplatformWeb.Endpoint,
+      # Redix pool supervisor
+      caching_supervisor
+      # isolated_supervisor
       # Start a worker by calling: Gameplatform.Worker.start_link(arg)
       # {Gameplatform.Worker, arg}
     ]

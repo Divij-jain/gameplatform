@@ -47,6 +47,16 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+config :joken, default_signer: "secret"
+
+config :gameplatform, Gameplatform.Cache.ApiToConfig,
+  caching_pool_sup: Gameplatform.Cache.Redis.RedixSupervisor,
+  caching_client: Gameplatform.Cache.Redis.RedixClient,
+  pool_size: 5
+
+config :gameplatform, Gameplatform.UserNotifier,
+  text_client: Gameplatform.UserNotifier.TextMessage
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

@@ -1,6 +1,8 @@
 defmodule GameplatformWeb.Router do
   use GameplatformWeb, :router
 
+  import GameplatformWeb.Plugs.UserAuth
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -8,22 +10,41 @@ defmodule GameplatformWeb.Router do
     plug :put_root_layout, {GameplatformWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :fetch_current_user
   end
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug :fetch_session
+    plug :fetch_current_user
+    plug OpenApiSpex.Plug.PutApiSpec, module: GameplatformWeb.ApiSpec
   end
 
   scope "/", GameplatformWeb do
     pipe_through :browser
-
     get "/", PageController, :index
   end
 
+  scope "/" do
+    pipe_through :browser
+    get "/swaggerui", OpenApiSpex.Plug.SwaggerUI, path: "/api/openapi"
+  end
+
   # Other scopes may use custom stacks.
-  # scope "/api", GameplatformWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", GameplatformWeb do
+    pipe_through :api
+
+    scope "/user" do
+      post "/getOtp", AuthController, :get_otp
+      post "/submitotp", AuthController, :submit_otp
+      post "/logout", AuthController, :log_out
+    end
+  end
+
+  scope "/api" do
+    pipe_through :api
+    get "/openapi", OpenApiSpex.Plug.RenderSpec, []
+  end
 
   # Enables LiveDashboard only for development
   #

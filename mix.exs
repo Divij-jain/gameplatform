@@ -48,7 +48,13 @@ defmodule Gameplatform.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.18"},
       {:jason, "~> 1.2"},
-      {:plug_cowboy, "~> 2.5"}
+      {:plug_cowboy, "~> 2.5"},
+      {:tesla, "~> 1.4.0"},
+      {:mox, "~> 1.0", only: :test},
+      {:redix, "~> 1.1"},
+      {:nimble_totp, "~> 0.1.0"},
+      {:joken, "~> 2.4"},
+      {:open_api_spex, "~> 3.11"}
     ]
   end
 
@@ -64,7 +70,8 @@ defmodule Gameplatform.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.deploy": ["esbuild default --minify", "phx.digest"]
+      "assets.deploy": ["esbuild default --minify", "phx.digest"],
+      spec: ["openapi.spec.json  --spec GameplatformWeb.ApiSpec \"priv/static/swagger.json\""]
     ]
   end
 end

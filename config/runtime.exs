@@ -81,3 +81,13 @@ if config_env() == :prod do
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
 end
+
+### my configs
+
+config :gameplatform, Gameplatform.Client.TwilioClient,
+  api_url: "https://api.twilio.com/2010-04-01/Accounts/#{System.get_env("TWILIO_ACCOUNT_SID")}/",
+  twilio_account_sid: System.get_env("TWILIO_ACCOUNT_SID"),
+  twilio_auth_token: System.get_env("TWILIO_AUTH_TOKEN"),
+  messaging_service_sid: System.get_env("MESSAGING_SERVICE_SID")
+
+config :joken, default_signer: System.get_env("AUTH_KEY")
