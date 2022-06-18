@@ -2,7 +2,7 @@ defmodule GameplatformWeb.Plugs.UserAuth do
   import Plug.Conn
 
   @max_age 60 * 60 * 24 * 60
-  @remember_me_cookie "_gameplatform_web_user_remember_me"
+  @remember_me_cookie "_gameplatform_web_user_token"
   @remember_me_options [sign: true, max_age: @max_age, same_site: "Lax"]
 
   alias Gameplatform.Auth.Token.TokenClient
@@ -23,11 +23,8 @@ defmodule GameplatformWeb.Plugs.UserAuth do
   end
 
   def fetch_current_user(conn, _opts) do
-    # IO.inspect(conn, label: "fetch_current_user")
     {user_token, conn} = ensure_user_token(conn)
-    # IO.inspect(user_token, label: "user_token")
     user_data = user_token && TokenClient.get_user_id_by_jwt_token(user_token)
-    # IO.inspect(user_data, label: "user_data")
     assign(conn, :current_user, user_data)
   end
 

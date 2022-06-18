@@ -19,7 +19,7 @@ defmodule Gameplatform.Auth do
 
   def verify_otp(params) do
     to_number = get_user_phone_number(params)
-    otp = Map.get(params, "otp")
+    otp = params.otp
 
     with {:ok, code} when code != nil <- check_for_an_existing_otp(to_number),
          true <- otp == code do
@@ -51,8 +51,8 @@ defmodule Gameplatform.Auth do
   end
 
   defp get_user_phone_number(params) do
-    mobile_number = Map.get(params, :phone_number)
-    country_code = Map.get(params, :country_code)
+    mobile_number = params.phone_number
+    country_code = params.country_code
     "#{country_code}#{mobile_number}"
   end
 
