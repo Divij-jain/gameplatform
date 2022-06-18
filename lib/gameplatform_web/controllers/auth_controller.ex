@@ -72,7 +72,9 @@ defmodule GameplatformWeb.AuthController do
     }
   end
 
-  def submit_otp(conn, params) do
+  def submit_otp(%{body_params: body_params} = conn, _params) do
+    params = Map.from_struct(body_params)
+
     with {:ok, true} <- Auth.verify_otp(params),
          {:ok, user} <- Account.get_current_user(params) do
       conn

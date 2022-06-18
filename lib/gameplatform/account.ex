@@ -13,7 +13,7 @@ defmodule Gameplatform.Account do
   end
 
   def check_existing_user(attrs) do
-    Repo.get_user_by_phone_number(attrs["phone_number"])
+    Repo.get_user_by_phone_number(attrs.phone_number)
   end
 
   def create_new_user(attrs) do

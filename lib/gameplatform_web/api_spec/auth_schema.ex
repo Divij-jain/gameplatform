@@ -53,7 +53,7 @@ defmodule GameplatformWeb.ApiSpec.AuthSchema do
       properties: %{
         phone_number: AuthSchema.PhoneNumber,
         country_code: AuthSchema.CountryCode,
-        otp: Otp
+        otp: AuthSchema.Otp
       },
       required: [:phone_number, :country_code, :otp],
       example: %{
