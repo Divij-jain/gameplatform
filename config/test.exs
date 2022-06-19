@@ -35,3 +35,5 @@ config :gameplatform, Gameplatform.UserNotifier,
   text_client: Gameplatform.UserNotifier.TextMessage
 
 config :gameplatform, Gameplatform.UserNotifier.TextMessage, client: TwilioClientMock
+
+config :joken, default_signer: "VDJvzyKfmsRLy0ZNMvQHMuWjttuTcjNs4Lod0SYd2Rd0RWjuUI89Fvsn2prb9a7T"

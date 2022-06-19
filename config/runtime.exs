@@ -90,4 +90,6 @@ config :gameplatform, Gameplatform.Client.TwilioClient,
   twilio_auth_token: System.get_env("TWILIO_AUTH_TOKEN"),
   messaging_service_sid: System.get_env("MESSAGING_SERVICE_SID")
 
-config :joken, default_signer: System.get_env("AUTH_KEY")
+if config_env() != :test do
+  config :joken, default_signer: System.get_env("AUTH_KEY")
+end
