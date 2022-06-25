@@ -31,3 +31,4 @@ start_db_services:
 stop: 
 	@docker compose down || exit 0
 	@docker compose kill || exit 0
+
