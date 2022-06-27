@@ -9,6 +9,7 @@ defmodule Gameplatform.Instrumentation.Instrumenter do
     Repo.setup!()
     Phoenix.setup!()
     Redix.setup!()
+
     OpentelemetryLoggerMetadata.setup()
   end
 end
