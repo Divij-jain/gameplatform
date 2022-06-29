@@ -54,7 +54,8 @@ defmodule Gameplatform.MixProject do
       {:redix, "~> 1.1"},
       {:nimble_totp, "~> 0.1.0"},
       {:joken, "~> 2.4"},
-      {:open_api_spex, "~> 3.11"}
+      {:open_api_spex, "~> 3.11"},
+      {:log_formatter, git: "git@github.com:divijjain/log_formatter.git", tag: "v1.0.0"}
     ]
   end
 

@@ -32,7 +32,8 @@ defmodule Gameplatform.Client.TwilioClient do
     |> Keyword.get(key)
   end
 
-  defp handle_response({:ok, %Tesla.Env{status: 201, body: _body}}), do: {:ok, "Request sent sucessfully"}
+  defp handle_response({:ok, %Tesla.Env{status: 201, body: _body}}),
+    do: {:ok, "Request sent sucessfully"}
 
   defp handle_response({:ok, %Tesla.Env{status: 400, body: %{"code" => 21_604}}}),
     do: {:error, :phone_number_required}

@@ -1,5 +1,6 @@
 defmodule GameplatformWeb.Plugs.UserAuth do
   import Plug.Conn
+  use GameplatformWeb, :controller
 
   @max_age 60 * 60 * 24 * 60
   @remember_me_cookie "_gameplatform_web_user_token"
@@ -26,6 +27,16 @@ defmodule GameplatformWeb.Plugs.UserAuth do
     {user_token, conn} = ensure_user_token(conn)
     user_data = user_token && TokenClient.get_user_id_by_jwt_token(user_token)
     assign(conn, :current_user, user_data)
+  end
+
+  def require_authenticated_user(conn, _opts) do
+    if conn.assigns[:current_user] do
+      conn
+    else
+      conn
+      |> json(%{error: "user unauthenticated"})
+      |> halt()
+    end
   end
 
   defp renew_session(conn) do

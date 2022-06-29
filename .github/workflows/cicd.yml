@@ -19,6 +19,7 @@ jobs:
       with:
         elixir-version: '1.12.3' # Define the elixir version [required]
         otp-version: '24.1' # Define the OTP version [required]
+
     - name: Step + Build Cache
       id: mix-cache
       uses: actions/cache@v2
@@ -29,19 +30,28 @@ jobs:
           ~/.mix
         key: ${{ runner.os }}-gameplatform-mix-deps+build-${{ hashFiles('**/mix.lock', '**/mix.exs', '**/config/*') }}
         restore-keys: ${{ runner.os }}-gameplatform-mix-deps+build-${{ hashFiles('**/mix.lock', '**/mix.exs', '**/config/*') }}
+
     - name: Install Rebar / Hex
       run: |
         mix local.rebar --force
         mix local.hex --force
+
     - name: Install dependencies
       if: steps.mix-cache.outputs.cache-hit != 'true'
-      run: | 
+      run: |
+       git config --global url."https://${GITHUB_TOKEN}:x-oauth-basic@github.com/".insteadOf "git@github.com:" 
        make deps
+      env: 
+        GITHUB_TOKEN: ${{ secrets.MY_GITHUB_ACCESS_TOKEN }}
+        GITHUB_ACCESS_TOKEN: ${{ secrets.MY_GITHUB_ACCESS_TOKEN }}
+
     - name: "docker Compose setup"
       run: make purge setup_test 
+
     - name: "Running Unit Test"
       run: |
         mix test
+
     - name: "docker Compose Stop and clean"
       if: always()
       run:  |

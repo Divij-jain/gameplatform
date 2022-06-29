@@ -35,3 +35,6 @@ gameplatform-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# vscode extensions
+
+*.vscode

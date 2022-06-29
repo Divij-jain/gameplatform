@@ -1,6 +1,7 @@
 defmodule Gameplatform.Account do
   alias Gameplatform.Accounts.Changesets.{User}
   alias Gameplatform.Accounts.Repository, as: Repo
+  alias Gameplatform.Ecto.ChangesetErrorTranslator
 
   def get_current_user(attrs) do
     case check_existing_user(attrs) do
@@ -20,5 +21,11 @@ defmodule Gameplatform.Account do
     attrs
     |> User.build()
     |> Repo.insert()
+    |> handle_result()
   end
+
+  defp handle_result({:ok, user}), do: {:ok, user}
+
+  defp handle_result({:error, result}),
+    do: {:error, ChangesetErrorTranslator.translate_error(result)}
 end
