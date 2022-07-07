@@ -5,9 +5,16 @@ defmodule Gameplatform.Cache.Redis.RedixSupervisor do
     # Specs for the Redix connections.
     pool_size = ApiToConfig.get_pool_size()
 
+    # sync_connect: true shuts tdown the app if redis server connection not possible
     children =
       for index <- 0..(pool_size - 1) do
-        Supervisor.child_spec({Redix, name: :"redix_#{index}"}, id: {Redix, index})
+        Supervisor.child_spec(
+          {
+            Redix,
+            sync_connect: true, name: :"redix_#{index}"
+          },
+          id: {Redix, index}
+        )
       end
 
     args = [children, [strategy: :one_for_one, name: __MODULE__]]

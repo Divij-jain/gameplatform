@@ -38,6 +38,8 @@ defmodule GameplatformWeb.Router do
       post "/getOtp", AuthController, :get_otp
       post "/submitotp", AuthController, :submit_otp
       post "/logout", AuthController, :log_out
+
+      get "/:user_id/getProfile", UserController, :get_profile
     end
   end
 

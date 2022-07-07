@@ -1,6 +1,8 @@
 defmodule GameplatformWeb.AuthControllerTest do
   use GameplatformWeb.ConnCase, async: true
 
+  alias Gameplatform.Test.Support.Helpers.AuthHelper
+
   import Mox
 
   setup :verify_on_exit!
@@ -8,7 +10,7 @@ defmodule GameplatformWeb.AuthControllerTest do
   describe "test for getOtp request" do
     setup %{conn: conn} do
       path = Routes.auth_path(conn, :get_otp)
-      phone = get_random_mobile_no()
+      phone = AuthHelper.get_random_mobile_no()
       {:ok, %{path: path, phone: phone}}
     end
 
@@ -64,7 +66,7 @@ defmodule GameplatformWeb.AuthControllerTest do
   describe "tests for submit otp" do
     setup %{conn: conn} do
       path = Routes.auth_path(conn, :submit_otp)
-      phone = get_random_mobile_no()
+      phone = AuthHelper.get_random_mobile_no()
       {:ok, %{path: path, phone: phone}}
     end
 
@@ -152,7 +154,7 @@ defmodule GameplatformWeb.AuthControllerTest do
 
   describe "tests for logout user" do
     setup _ do
-      phone = get_random_mobile_no()
+      phone = AuthHelper.get_random_mobile_no()
       {:ok, %{phone: phone}}
     end
 
@@ -192,13 +194,6 @@ defmodule GameplatformWeb.AuthControllerTest do
 
       assert token_cookie == nil
     end
-  end
-
-  defp get_random_mobile_no() do
-    DateTime.utc_now()
-    |> :erlang.phash2(900_000_000)
-    |> Kernel.+(9_000_000_000)
-    |> to_string()
   end
 
   def send_request(conn, path, status_code, body \\ []) do

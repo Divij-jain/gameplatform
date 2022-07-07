@@ -1,7 +1,6 @@
 defmodule GameplatformWeb.AuthController do
   use GameplatformWeb, :controller
 
-  # ,parameter: 5]
   import OpenApiSpex.Operation, only: [request_body: 4, response: 3]
 
   alias OpenApiSpex.Operation
