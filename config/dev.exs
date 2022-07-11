@@ -8,7 +8,8 @@ config :gameplatform, Gameplatform.Repo,
   database: "gameplatform_dev",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
-  pool_size: 10
+  pool_size: 10,
+  telemetry_prefix: [:gameplatform, :repo]
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
@@ -77,3 +78,8 @@ config :phoenix, :plug_init_mode, :runtime
 
 config :gameplatform, Gameplatform.UserNotifier.TextMessage,
   client: Gameplatform.Client.SmsClientDev
+
+config :opentelemetry, :processors,
+  otel_batch_processor: %{
+    exporter: {:otel_exporter_stdout, []}
+  }

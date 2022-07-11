@@ -52,9 +52,4 @@ defmodule Gameplatform.Account do
       {:ok, %{wallet_1: user_wallet_1, wallet_2: user_wallet_2}}
     end
   end
-
-  defp handle_result({:ok, user}), do: {:ok, user}
-
-  defp handle_result({:error, result}),
-    do: {:error, ChangesetErrorTranslator.translate_error(result)}
 end
