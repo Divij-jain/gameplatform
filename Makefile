@@ -27,7 +27,7 @@ setup_test: start_db_services
 
 reset_test: export MIX_ENV=test
 reset_test: start_db_services
-	@mix ecto.setup --no-compile
+	@mix ecto.reset --no-compile
 
 start_db_services:
 	@docker compose up -d --wait db redis

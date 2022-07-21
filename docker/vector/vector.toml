@@ -1,0 +1,35 @@
+[api]
+enabled = true
+playground = false
+address = "0.0.0.0:8086"
+
+[sources.heartbeat]
+type = "http"
+address = "0.0.0.0:8085"
+encoding = "text"
+path = "/heartbeat"
+
+[sources.generate_syslog]
+type = "demo_logs"
+format = "syslog"
+count = 100
+
+[transforms.remap_syslog]
+inputs = ["generate_syslog"]
+type = "remap"
+source = '''
+  structured = parse_syslog!(.message)
+  . = merge(., structured)
+'''
+
+[sinks.loki]
+inputs = ["remap_syslog"]
+type = "loki"
+encoding.codec = "json"
+endpoint = "http://loki:3100"
+labels.service = "a"
+labels.image = "b"
+labels.container_id = "c"
+labels.level = "d"
+labels.module = "e"
+remove_label_fields = true

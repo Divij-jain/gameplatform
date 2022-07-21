@@ -39,6 +39,16 @@ services:
     ports:
       - ${LOKI_DOCKER_COMPOSE_PORT}:3100
     command: -config.file=/etc/loki/local-config.yaml
+  vector:
+    image: timberio/vector:0.19.0-alpine
+    volumes:
+      - ./docker/vector/vector.toml:/etc/vector/vector.toml 
+    ports:
+      - 8383:8383
+      - ${PORT_VECTOR_INSTRUMENTOR_COMPOSE}:8086 
+      - ${PORT_VECTOR_HEARTBEAT_COMPOSE}:8085 
+    depends_on:
+      - loki
   tempo:
     image: grafana/tempo:1.1.0
     command: ["-config.file=/etc/tempo.yaml"]
