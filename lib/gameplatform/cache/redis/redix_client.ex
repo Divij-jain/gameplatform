@@ -1,4 +1,7 @@
 defmodule Gameplatform.Cache.Redis.RedixClient do
+  @moduledoc """
+  Module to implement redis for caching.
+  """
   alias Gameplatform.Cache.ApiToConfig
 
   @pool_size ApiToConfig.get_pool_size()

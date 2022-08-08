@@ -1,4 +1,7 @@
 defmodule Gameplatform.Accounts.Repository do
+  @moduledoc """
+  Repository module for the platform.
+  """
   alias Gameplatform.Repo
   alias Gameplatform.Accounts.Changesets
   alias Gameplatform.Accounts.Schema.User

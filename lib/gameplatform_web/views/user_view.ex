@@ -15,6 +15,7 @@ defmodule GameplatformWeb.UserView do
   end
 
   defp parse_user_wallets([]), do: []
+
   defp parse_user_wallets([user_wallet | _user_wallets]) do
     parse_user_wallets(user_wallet)
   end

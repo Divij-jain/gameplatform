@@ -1,4 +1,7 @@
 defmodule Gameplatform.Accounts.Changesets.UserProfile do
+  @moduledoc """
+  Module for casting user profile params.
+  """
   import Ecto.Changeset
 
   alias Gameplatform.Accounts.Schema.UserProfile

@@ -38,3 +38,5 @@ npm-debug.log
 # vscode extensions
 
 *.vscode
+
+node_modules/*

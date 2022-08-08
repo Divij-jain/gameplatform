@@ -1,4 +1,7 @@
 defmodule GameplatformWeb.Plugs.UserAuth do
+  @moduledoc """
+    Module for making user authentication.
+  """
   import Plug.Conn
   use GameplatformWeb, :controller
 
@@ -16,6 +19,8 @@ defmodule GameplatformWeb.Plugs.UserAuth do
     |> put_session(:user_token, token)
     |> maybe_write_remember_me_cookie(token, params)
   end
+
+  def get_auth_token(user, _params \\ %{}), do: TokenClient.create_new_token(user)
 
   def log_out_user(conn) do
     conn

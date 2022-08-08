@@ -90,7 +90,7 @@ defmodule GameplatformWeb.AuthControllerTest do
     end
 
     test "request fails due to invalid body_params", %{conn: conn, path: path, phone: phone} do
-      body_params = %{"phone_number" => phone, "country_code" => "+91", "otp" => 12345}
+      body_params = %{"phone_number" => phone, "country_code" => "+91", "otp" => 12_345}
 
       assert json_response = send_request(conn, path, 422, body_params)
 

@@ -76,9 +76,10 @@ defmodule GameplatformWeb.AuthController do
 
     with {:ok, true} <- Auth.verify_otp(params),
          {:ok, user} <- Account.get_current_user(params) do
+      auth_token = AuthPlug.get_auth_token(user)
+
       conn
-      |> AuthPlug.log_in_user(user, %{"remember_me" => "true"})
-      |> json(%{result: "success"})
+      |> json(%{status_code: "ok", data: %{token: auth_token, user_id: user.id}})
     else
       {:error, status_code, error} ->
         conn

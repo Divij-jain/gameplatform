@@ -1,4 +1,7 @@
 defmodule Gameplatform.Accounts.Changesets.User do
+  @moduledoc """
+  Module to implement user changeset.
+  """
   import Ecto.Changeset
 
   alias Gameplatform.Accounts.Schema.User

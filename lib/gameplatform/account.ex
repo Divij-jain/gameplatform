@@ -1,4 +1,7 @@
 defmodule Gameplatform.Account do
+  @doc """
+  Entrypoint module to handle user accounts.
+  """
   alias Gameplatform.Accounts.Repository, as: Repo
   alias Gameplatform.Ecto.ChangesetErrorTranslator
 
@@ -53,8 +56,8 @@ defmodule Gameplatform.Account do
     end
   end
 
-  defp handle_result({:ok, user}), do: {:ok, user}
+  # defp handle_result({:ok, user}), do: {:ok, user}
 
-  defp handle_result({:error, result}),
-    do: {:error, ChangesetErrorTranslator.translate_error(result)}
+  # defp handle_result({:error, result}),
+  #   do: {:error, ChangesetErrorTranslator.translate_error(result)}
 end
