@@ -1,3 +1,13 @@
+check-env:
+	ifndef GITHUB_ACCESS_TOKEN
+		$(error GITHUB_ACCESS_TOKEN is not defined, please check your .envrc.custom)
+	endif
+
+check-path:
+	ifeq (, $(shell which aws))
+		$(error aws-cli not installed, please install the aws-cli v2 from amazon)
+	endif
+
 clean: 
 	$(MAKE) purge
 	@rm -rf .docker/
@@ -27,7 +37,7 @@ setup_test: start_db_services
 
 reset_test: export MIX_ENV=test
 reset_test: start_db_services
-	@mix ecto.setup --no-compile
+	@mix ecto.reset --no-compile
 
 start_db_services:
 	@docker compose up -d --wait db redis
@@ -36,3 +46,5 @@ stop:
 	@docker compose down || exit 0
 	@docker compose kill || exit 0
 
+image: check-env check-path
+	${MAKE} build_base

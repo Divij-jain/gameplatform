@@ -42,5 +42,24 @@ services:
     ports:
       - ${TEMPO_DOCKER_COMPOSE_PORT}:8000 # tempo
       - 55681:55681 # otlp http
+  gameplatform:
+    image: gameplatform
+    environment: 
+      DATABASE_URL: "postgres://postgres:postgres@db/gameplatform_dev"
+      GITHUB_ACCESS_TOKEN: ${GITHUB_ACCESS_TOKEN}
+      GRAFANA_TOKEN: ${GRAFANA_TOKEN}
+      AUTH_KEY: ${AUTH_KEY}
+      MESSAGING_SERVICE_SID: ${MESSAGING_SERVICE_SID}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
+      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+    depends_on:
+      - db
+      - redis
+    links: 
+      - db
+      - redis
+    ports: 
+      - "4000:4000"
 volumes:
   grafana-data: {}
