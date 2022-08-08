@@ -1,7 +1,4 @@
 defmodule Gameplatform.Account do
-  @doc """
-  Entrypoint module to handle user accounts.
-  """
   alias Gameplatform.Accounts.Repository, as: Repo
   alias Gameplatform.Ecto.ChangesetErrorTranslator
 
