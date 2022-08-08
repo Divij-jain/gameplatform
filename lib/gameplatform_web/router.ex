@@ -41,6 +41,10 @@ defmodule GameplatformWeb.Router do
 
       get "/:user_id/getProfile", UserController, :get_profile
     end
+
+    scope "/get_games" do
+      get "/", GameController, :list_games
+    end
   end
 
   scope "/api" do

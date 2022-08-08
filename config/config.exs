@@ -50,7 +50,8 @@ config :logger, :console,
   metadata: [
     :request_id,
     :pid,
-    :trace_id
+    :trace_id,
+    :span_id
   ]
 
 # Use Jason for JSON parsing in Phoenix
@@ -68,6 +69,8 @@ config :gameplatform, Gameplatform.UserNotifier,
 
 config :gameplatform, Gameplatform.UserNotifier.TextMessage,
   client: Gameplatform.Client.TwilioClient
+
+config :opentelemetry, :resource, service: %{name: "gameplatform"}
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

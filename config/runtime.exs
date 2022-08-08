@@ -93,3 +93,15 @@ config :gameplatform, Gameplatform.Client.TwilioClient,
 if config_env() != :test do
   config :joken, default_signer: System.get_env("AUTH_KEY")
 end
+
+config :opentelemetry, :processors,
+  otel_batch_processor: %{
+    exporter: {
+      :opentelemetry_exporter,
+      %{
+        endpoints: [
+          {:http, 'localhost', 55681, []}
+        ]
+      }
+    }
+  }

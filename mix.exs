@@ -57,6 +57,15 @@ defmodule Gameplatform.MixProject do
       {:open_api_spex, "~> 3.11"},
       {:log_formatter, git: "git@github.com:divijjain/log_formatter.git", tag: "v1.0.0"},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
+      # opentelemetry sdk
+      {:opentelemetry, "~> 1.0.0-rc.2"},
+      # exporter
+      {:opentelemetry_exporter, "~> 1.0.0-rc"},
+      # api for
+      {:opentelemetry_ecto, "~> 1.0.0-rc"},
+      {:opentelemetry_phoenix, "~> 1.0.0-rc"},
+      {:opentelemetry_logger_metadata, "~> 0.1.0-rc"},
+      {:opentelemetry_redix, "~> 0.1"}
     ]
   end
 

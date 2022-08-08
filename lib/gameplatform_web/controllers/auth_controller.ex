@@ -6,7 +6,7 @@ defmodule GameplatformWeb.AuthController do
   alias OpenApiSpex.Operation
   alias Gameplatform.Auth
   alias Gameplatform.Account
-  alias GameplatformWeb.ApiSpec.AuthSchema
+  alias GameplatformWeb.ApiSpec.Schema
   alias GameplatformWeb.Plugs.UserAuth, as: AuthPlug
 
   plug OpenApiSpex.Plug.CastAndValidate, json_render_error_v2: true
@@ -25,12 +25,12 @@ defmodule GameplatformWeb.AuthController do
         request_body(
           "The getOtp request attributes",
           "application/json",
-          AuthSchema.GetOtpRequest,
+          Schema.GetOtpRequest,
           required: true
         ),
       responses: %{
         201 =>
-          response("Request submitted Response", "application/json", AuthSchema.RequestSubmitted),
+          response("Request submitted Response", "application/json", Schema.RequestSubmitted),
         422 => OpenApiSpex.JsonErrorResponse.response()
       }
     }
@@ -60,12 +60,12 @@ defmodule GameplatformWeb.AuthController do
         request_body(
           "The submit_otp request attributes",
           "application/json",
-          AuthSchema.SubmitOtpRequest,
+          Schema.SubmitOtpRequest,
           required: true
         ),
       responses: %{
         201 =>
-          response("Request submitted Response", "application/json", AuthSchema.RequestSubmitted),
+          response("Request submitted Response", "application/json", Schema.RequestSubmitted),
         422 => OpenApiSpex.JsonErrorResponse.response()
       }
     }

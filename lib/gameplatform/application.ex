@@ -10,6 +10,8 @@ defmodule Gameplatform.Application do
   def start(_type, _args) do
     caching_supervisor = ApiToConfig.get_caching_service()
 
+    Gameplatform.Instrumentation.Instrumenter.setup!()
+
     children = [
       # Start the Ecto repository
       Gameplatform.Repo,

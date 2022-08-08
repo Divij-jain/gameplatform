@@ -5,7 +5,7 @@ defmodule GameplatformWeb.UserController do
 
   alias Gameplatform.Account
   alias OpenApiSpex.Operation
-  alias GameplatformWeb.ApiSpec.UserSchema
+  alias GameplatformWeb.ApiSpec.Schema
 
   plug OpenApiSpex.Plug.CastAndValidate, json_render_error_v2: true
 
@@ -29,7 +29,7 @@ defmodule GameplatformWeb.UserController do
         )
       ],
       responses: %{
-        201 => response("GetProfile", "application/json", UserSchema.ResponseGetProfile),
+        201 => response("GetProfile", "application/json", Schema.ResponseGetProfile),
         422 => OpenApiSpex.JsonErrorResponse.response()
       }
     }
