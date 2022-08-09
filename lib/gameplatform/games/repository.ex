@@ -16,4 +16,10 @@ defmodule Gameplatform.Games.Repository do
     |> order_by([b], b.id)
     |> Repo.all()
   end
+
+  def get_sku_list_for_all_games() do
+    Game
+    |> Queries.get_all_games_with_sku_list()
+    |> Repo.all()
+  end
 end

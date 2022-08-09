@@ -24,10 +24,9 @@ defmodule Gameplatform.Application do
       # Start the Endpoint (http/https)
       GameplatformWeb.Endpoint,
       # Redix pool supervisor
-      caching_supervisor
-      # isolated_supervisor
-      # Start a worker by calling: Gameplatform.Worker.start_link(arg)
-      # {Gameplatform.Worker, arg}
+      caching_supervisor,
+      # QueueSupervisor
+      {Gameplatform.GameQueue.QueueSupervisor, []}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
