@@ -4,6 +4,8 @@ defmodule Gameplatform.Cache.Redis.RedixSupervisor do
   def child_spec(_args) do
     # Specs for the Redix connections.
     pool_size = ApiToConfig.get_pool_size()
+    host = ApiToConfig.get_redis_host()
+    port = ApiToConfig.get_redis_port()
 
     # sync_connect: true shuts tdown the app if redis server connection not possible
     children =
@@ -11,7 +13,7 @@ defmodule Gameplatform.Cache.Redis.RedixSupervisor do
         Supervisor.child_spec(
           {
             Redix,
-            sync_connect: true, name: :"redix_#{index}"
+            sync_connect: true, name: :"redix_#{index}", host: host, port: port
           },
           id: {Redix, index}
         )

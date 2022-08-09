@@ -1,4 +1,7 @@
 # File: base dockerfile
+# Basix rule of dockerfile is that each step below in an intermediate image layer which is cached.
+# hence if one step varies then all ahead cached layer images will be recreated.
+
 FROM elixir:1.13-alpine AS build-base
 
 RUN apk add --no-cache \
@@ -43,7 +46,7 @@ RUN mix release
 
 EXPOSE 4000
 
-CMD ["/gameplatform/_build/prod/rel/gameplatform/bin/gameplatform", "start_iex"]
+CMD ["/gameplatform/_build/prod/rel/gameplatform/bin/gameplatform", "start"]
 
 
 

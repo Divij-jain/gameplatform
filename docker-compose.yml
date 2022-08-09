@@ -14,7 +14,7 @@ services:
   redis:
     image: redis:6.2-alpine
     ports:
-      - '6379:6379'
+      - ${REDIS_DOCKER_PORT}:6379
     command: 
       redis-server 
     # volumes: 
@@ -53,6 +53,8 @@ services:
       TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
       TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
       SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      REDIS_HOST: redis
+      REDIS_DOCKER_PORT: ${REDIS_DOCKER_PORT}
     depends_on:
       - db
       - redis

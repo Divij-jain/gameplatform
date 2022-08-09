@@ -105,3 +105,9 @@ config :opentelemetry, :processors,
       }
     }
   }
+
+# configuring redis credentials
+
+config :gameplatform, Gameplatform.Cache.ApiToConfig,
+  host: System.get_env("REDIS_HOST"),
+  port: String.to_integer(System.get_env("REDIS_DOCKER_PORT"))
