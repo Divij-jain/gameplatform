@@ -20,6 +20,8 @@ defmodule Gameplatform.Repo.Migrations.CreateUserProfileTable do
       add :email, :string
       add :first_name, :string
       add :second_name, :string
+      add :gender, :string
+      add :image, :string
       add :kyc_status, :boolean, default: false
 
       timestamps(

@@ -7,6 +7,7 @@ defmodule Gameplatform.Games.Schema.Game do
     field :game_hash, :string
     field :app_id, :string
     field :image_url, :string
+    field :gameplay_url, :string
     field :play_mode, :string
 
     timestamps(type: :utc_datetime_usec)

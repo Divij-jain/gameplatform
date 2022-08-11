@@ -12,6 +12,8 @@ defmodule Gameplatform.Cache.Redis.RedixClient do
 
   def get_value_from_cache(key), do: command(["GET", key])
 
+  def delete_value_from_cache(key), do: command(["DEL", key])
+
   def command(command) do
     Redix.command(:"redix_#{random_index()}", command)
   end

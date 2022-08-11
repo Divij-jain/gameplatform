@@ -1,8 +1,19 @@
 defmodule Gameplatform.Games.Repository do
   alias Gameplatform.Repo
-  alias Gameplatform.Games.Schema.Game
+  import Ecto.Query
+  alias Gameplatform.Games.Schema.{Game, Banner}
 
-  def get_all_games do
-    Repo.all(Game)
+  def get_active_games() do
+    Game
+    |> where([g], g.active == true)
+    |> order_by([g], g.id)
+    |> Repo.all()
+  end
+
+  def get_active_banners() do
+    Banner
+    |> where([b], b.active == true)
+    |> order_by([b], b.id)
+    |> Repo.all()
   end
 end
