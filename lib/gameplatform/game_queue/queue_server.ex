@@ -23,5 +23,6 @@ defmodule Gameplatform.GameQueue.QueueServer do
 
   defp get_queue_registration_name(%{game_id: game_id, sku_code: sku_code} = _args) do
     "#{game_id}_#{sku_code}"
+    |> String.to_atom()
   end
 end

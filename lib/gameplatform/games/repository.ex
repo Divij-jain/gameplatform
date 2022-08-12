@@ -1,7 +1,9 @@
 defmodule Gameplatform.Games.Repository do
   alias Gameplatform.Repo
-  import Ecto.Query
+  alias Gameplatform.Games.Queries
   alias Gameplatform.Games.Schema.{Game, Banner}
+
+  import Ecto.Query
 
   def get_active_games() do
     Game
