@@ -2,8 +2,8 @@ import Config
 
 # Configure your database
 config :gameplatform, Gameplatform.Repo,
-  username: "nayanjain",
-  password: "nayanjain",
+  username: "postgres",
+  password: "postgres",
   hostname: "localhost",
   database: "gameplatform_dev",
   stacktrace: true,

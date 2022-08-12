@@ -1,6 +1,8 @@
 defmodule Gameplatform.Games.Schema.Game do
   use Ecto.Schema
 
+  alias Gameplatform.Games.Schema.GameSku
+
   schema "games" do
     field :name, :string
     field :active, :boolean
@@ -11,5 +13,7 @@ defmodule Gameplatform.Games.Schema.Game do
     field :play_mode, :string
 
     timestamps(type: :utc_datetime_usec)
+
+    has_many :game_skus, GameSku, foreign_key: :game_id
   end
 end
