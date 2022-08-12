@@ -4,10 +4,10 @@ defmodule Gameplatform.GameQueue.QueueServer do
   """
   use GenServer
 
-  alias Gameplatform.GameQueue.GameQueue
+  alias Gameplatform.GameQueue.Model.GameQueue
 
   def start_link(args) do
-    name = get_queue_registration_name(args)
+    name = Map.get(args, :name)
     GenServer.start_link(__MODULE__, args, name: name)
   end
 
@@ -21,8 +21,22 @@ defmodule Gameplatform.GameQueue.QueueServer do
     {:noreply, new_state}
   end
 
-  defp get_queue_registration_name(%{game_id: game_id, sku_code: sku_code} = _args) do
-    "#{game_id}_#{sku_code}"
-    |> String.to_atom()
+  def handle_call({:add_user, user_id, amount}, _from, %{queue: queue} = state) do
+    queue_amount = GameQueue.get_queue_amount(queue)
+    IO.inspect([queue_amount, amount])
+
+    if Decimal.eq?(queue_amount, amount) do
+      new_queue = GameQueue.add_to_queue(queue, user_id)
+      new_state = update_state(state, new_queue)
+      reply = {:ok, :user_added}
+      {:reply, reply, new_state}
+    else
+      reply = {:error, :invalid_amount}
+      {:reply, reply, state}
+    end
+  end
+
+  defp update_state(state, new_queue) do
+    %{state | queue: new_queue}
   end
 end

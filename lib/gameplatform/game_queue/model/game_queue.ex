@@ -1,7 +1,9 @@
-defmodule Gameplatform.GameQueue.GameQueue do
+defmodule Gameplatform.GameQueue.Model.GameQueue do
   @moduledoc """
   Defines the structure of game queue
   """
+
+  alias __MODULE__
 
   defstruct [:users, :game_id, :sku_code, :amount]
 
@@ -12,7 +14,7 @@ defmodule Gameplatform.GameQueue.GameQueue do
           amount: number()
         }
 
-  @spec new(map()) :: Gameplatform.GameQueue.GameQueue.t()
+  @spec new(map()) :: GameQueue.t()
   def new(args) do
     %{
       game_id: game_id,
@@ -26,5 +28,15 @@ defmodule Gameplatform.GameQueue.GameQueue do
       sku_code: sku_code,
       amount: sku_amount
     }
+  end
+
+  @spec get_queue_amount(queue :: GameQueue.t()) :: Decimal.t()
+  def get_queue_amount(queue), do: queue.amount
+
+  @spec add_to_queue(queue :: GameQueue.t(), any()) :: GameQueue.t()
+  def add_to_queue(queue, user_id) do
+    Map.update(queue, :users, [], fn existing_users ->
+      existing_users ++ [user_id]
+    end)
   end
 end
