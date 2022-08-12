@@ -12,7 +12,7 @@ defmodule GameplatformWeb.Plugs.UserAuth do
   alias Gameplatform.Auth.Token.TokenClient
 
   def log_in_user(conn, user, params \\ %{}) do
-    token = TokenClient.create_new_token(user)
+    token = get_auth_token(user)
 
     conn
     |> renew_session()
