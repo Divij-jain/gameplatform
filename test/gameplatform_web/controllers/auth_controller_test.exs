@@ -90,7 +90,7 @@ defmodule GameplatformWeb.AuthControllerTest do
     end
 
     test "request fails due to invalid body_params", %{conn: conn, path: path, phone: phone} do
-      body_params = %{"phone_number" => phone, "country_code" => "+91", "otp" => 12345}
+      body_params = %{"phone_number" => phone, "country_code" => "+91", "otp" => 12_345}
 
       assert json_response = send_request(conn, path, 422, body_params)
 
@@ -152,49 +152,49 @@ defmodule GameplatformWeb.AuthControllerTest do
     end
   end
 
-  describe "tests for logout user" do
-    setup _ do
-      phone = AuthHelper.get_random_mobile_no()
-      {:ok, %{phone: phone}}
-    end
+  # describe "tests for logout user" do
+  #   setup _ do
+  #     phone = AuthHelper.get_random_mobile_no()
+  #     {:ok, %{phone: phone}}
+  #   end
 
-    test "request successfully deletes the cookie", %{conn: conn, phone: phone} do
-      get_body_params = %{"phone_number" => phone, "country_code" => "+91"}
-      get_path = Routes.auth_path(conn, :get_otp)
+  #   test "request successfully deletes the cookie", %{conn: conn, phone: phone} do
+  #     get_body_params = %{"phone_number" => phone, "country_code" => "+91"}
+  #     get_path = Routes.auth_path(conn, :get_otp)
 
-      expect(TwilioClientMock, :send_sms, 1, fn _phone_number, message_body ->
-        [_, otp] = String.split(message_body, "is ")
-        {:ok, %{"otp" => otp}}
-      end)
+  #     expect(TwilioClientMock, :send_sms, 1, fn _phone_number, message_body ->
+  #       [_, otp] = String.split(message_body, "is ")
+  #       {:ok, %{"otp" => otp}}
+  #     end)
 
-      json_response = send_request(conn, get_path, 200, get_body_params)
+  #     json_response = send_request(conn, get_path, 200, get_body_params)
 
-      otp = json_response["otp"]
+  #     otp = json_response["otp"]
 
-      submit_path = Routes.auth_path(conn, :submit_otp)
-      submit_body_params = %{"phone_number" => phone, "country_code" => "+91", "otp" => otp}
+  #     submit_path = Routes.auth_path(conn, :submit_otp)
+  #     submit_body_params = %{"phone_number" => phone, "country_code" => "+91", "otp" => otp}
 
-      assert resp_conn =
-               conn
-               |> put_req_header("content-type", "application/json")
-               |> post(submit_path, submit_body_params)
+  #     assert resp_conn =
+  #              conn
+  #              |> put_req_header("content-type", "application/json")
+  #              |> post(submit_path, submit_body_params)
 
-      token_cookie = get_cookie_from_conn(resp_conn, "_gameplatform_web_user_token")
+  #     token_cookie = get_cookie_from_conn(resp_conn, "_gameplatform_web_user_token")
 
-      assert token_cookie != nil
+  #     assert token_cookie != nil
 
-      logout_path = Routes.auth_path(conn, :log_out)
+  #     logout_path = Routes.auth_path(conn, :log_out)
 
-      token_cookie =
-        conn
-        |> put_req_header("content-type", "application/json")
-        |> put_req_cookie("_gameplatform_web_user_token", token_cookie)
-        |> post(logout_path)
-        |> get_cookie_from_conn("_gameplatform_web_user_token")
+  #     token_cookie =
+  #       conn
+  #       |> put_req_header("content-type", "application/json")
+  #       |> put_req_cookie("_gameplatform_web_user_token", token_cookie)
+  #       |> post(logout_path)
+  #       |> get_cookie_from_conn("_gameplatform_web_user_token")
 
-      assert token_cookie == nil
-    end
-  end
+  #     assert token_cookie == nil
+  #   end
+  # end
 
   def send_request(conn, path, status_code, body \\ []) do
     assert conn

@@ -16,6 +16,7 @@ defmodule Gameplatform.Repo.Migrations.AddGamesTable do
       add :game_hash, :string
       add :app_id, :string
       add :image_url, :string
+      add :gameplay_url, :string
       add :play_mode, :string
 
       timestamps(

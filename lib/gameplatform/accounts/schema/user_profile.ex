@@ -8,6 +8,8 @@ defmodule Gameplatform.Accounts.Schema.UserProfile do
     field :email, :string
     field :first_name, :string
     field :second_name, :string
+    field :gender, :string
+    field :image, :string
     field :kyc_status, :boolean
     timestamps(type: :utc_datetime_usec)
 

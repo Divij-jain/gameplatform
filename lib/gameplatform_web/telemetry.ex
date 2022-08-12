@@ -1,4 +1,7 @@
 defmodule GameplatformWeb.Telemetry do
+  @moduledoc """
+  Module to integrate telemetry to gameplatform.
+  """
   use Supervisor
   import Telemetry.Metrics
 

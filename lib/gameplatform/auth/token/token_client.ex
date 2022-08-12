@@ -8,7 +8,13 @@ defmodule Gameplatform.Auth.Token.TokenClient do
   end
 
   def get_user_id_by_jwt_token(token) do
-    {:ok, claims} = Token.verify_and_validate(token)
-    Map.get(claims, "user_id")
+    # {:ok, claims} = Token.verify_and_validate(token)
+    case Token.verify_and_validate(token) do
+      {:ok, claims} ->
+        Map.get(claims, "user_id")
+
+      _ ->
+        nil
+    end
   end
 end

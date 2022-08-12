@@ -29,7 +29,7 @@ defmodule GameplatformWeb.UserController do
         )
       ],
       responses: %{
-        201 => response("GetProfile", "application/json", Schema.ResponseGetProfile),
+        201 => response("GetProfile", "application/json", Schema.GetProfileResponse),
         422 => OpenApiSpex.JsonErrorResponse.response()
       }
     }

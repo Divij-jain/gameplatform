@@ -20,6 +20,10 @@ defmodule GameplatformWeb.Router do
     plug OpenApiSpex.Plug.PutApiSpec, module: GameplatformWeb.ApiSpec
   end
 
+  # pipeline :auth do
+  #   plug :fetch_current_user
+  # end
+
   scope "/", GameplatformWeb do
     pipe_through :browser
     get "/", PageController, :index
@@ -32,19 +36,21 @@ defmodule GameplatformWeb.Router do
 
   # Other scopes may use custom stacks.
   scope "/api", GameplatformWeb do
-    pipe_through :api
-
     scope "/user" do
-      post "/getOtp", AuthController, :get_otp
-      post "/submitotp", AuthController, :submit_otp
+      pipe_through :api
+      # pipe_through :auth
+
       post "/logout", AuthController, :log_out
-
-      get "/:user_id/getProfile", UserController, :get_profile
+      post "/getOtp", AuthController, :get_otp
+      post "/submitOtp", AuthController, :submit_otp
     end
 
-    scope "/get_games" do
-      get "/", GameController, :list_games
-    end
+    # scope "/auth" do
+    #   pipe_through :api
+
+    #   post "/getOtp", AuthController, :get_otp
+    #   post "/submitOtp", AuthController, :submit_otp
+    # end
   end
 
   scope "/api" do

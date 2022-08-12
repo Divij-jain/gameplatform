@@ -13,6 +13,8 @@ defmodule Gameplatform.Application do
     Gameplatform.Instrumentation.Instrumenter.setup!()
 
     children = [
+      # Start he user process supervisor
+      Gameplatform.UserSupervisor,
       # Start the Ecto repository
       Gameplatform.Repo,
       # Start the Telemetry supervisor

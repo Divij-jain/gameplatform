@@ -1,4 +1,7 @@
 defmodule Gameplatform.Auth do
+  @moduledoc """
+  Module to perform auth operations for user.
+  """
   alias Gameplatform.Auth.Otp
   alias Gameplatform.Cache
   alias Gameplatform.UserNotifier
@@ -56,8 +59,14 @@ defmodule Gameplatform.Auth do
     "#{country_code}#{mobile_number}"
   end
 
-  defp check_for_an_existing_otp(key),
-    do: Cache.get_value_from_cache(key)
+  defp check_for_an_existing_otp(key) do
+    try do
+      Cache.get_value_from_cache(key)
+    rescue
+      error ->
+        error
+    end
+  end
 
   defp set_otp_in_redis(key, value, expiry_time),
     do: Cache.set_key_in_cache(key, value, expiry_time)
@@ -68,7 +77,7 @@ defmodule Gameplatform.Auth do
   end
 
   defp create_body(code) do
-    "Your verification code for Platform is #{code}"
+    %{status_code: "ok", data: %{code: code}}
   end
 
   defp handle_error(response) do

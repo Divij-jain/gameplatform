@@ -88,6 +88,8 @@ defmodule GameplatformWeb.ApiSpec.Schema do
         first_name: String,
         second_name: String,
         kyc_status: Boolean,
+        gender: String,
+        image: String,
         inserted_at: UtcDateTime,
         updated_at: UtcDateTime
       }
@@ -109,17 +111,24 @@ defmodule GameplatformWeb.ApiSpec.Schema do
     })
   end
 
-  defmodule ResponseGetProfile do
+  defmodule GetProfileResponse do
     @moduledoc false
 
     OpenApiSpex.schema(%{
-      title: "ResponseGetProfile",
+      title: "GetProfileResponse",
       type: :object,
       properties: %{
-        user_profile: UserProfile,
-        user_wallets: %Schema{
-          type: :array,
-          items: UserWallet
+        status_code: String,
+        message: String,
+        data: %Schema{
+          type: :object,
+          properties: %{
+            user_profile: UserProfile,
+            user_wallets: %Schema{
+              type: :array,
+              items: UserWallet
+            }
+          }
         }
       }
     })
@@ -164,30 +173,97 @@ defmodule GameplatformWeb.ApiSpec.Schema do
   defmodule RequestSubmitted do
     @moduledoc false
 
-    OpenApiSpex.schema(%{
-      title: "Request submitted response",
-      type: :object,
-      properties: %{},
-      example: %{}
-    })
+    OpenApiSpex.schema(
+      %{
+        title: "Request submitted response",
+        type: :object,
+        properties: %{
+          status_code: String,
+          message: String
+        }
+      },
+      example: %{
+        status_code: "OK",
+        message: "some message"
+      }
+    )
   end
 
-  defmodule ResponseListGames do
+  defmodule AuthResponse do
+    @moduledoc false
+
+    OpenApiSpex.schema(
+      %{
+        title: "Request submitted response",
+        type: :object,
+        properties: %{
+          status_code: String,
+          message: String,
+          data: %Schema{
+            type: :object,
+            properties: %{
+              token: String,
+              user_id: Integer
+            }
+          }
+        }
+      },
+      example: %{
+        status_code: "OK",
+        message: "some message"
+      }
+    )
+  end
+
+  defmodule ListGamesResponse do
     @moduledoc false
 
     OpenApiSpex.schema(%{
-      title: "ResponseListGames",
-      type: :array,
-      items: %Schema{
-        type: :object,
-        properties: %{
-          id: String,
-          active: Boolean,
-          name: String,
-          game_hash: String,
-          app_id: String,
-          image_url: String,
-          play_mode: String
+      title: "ListGamesResponse",
+      type: :object,
+      properties: %{
+        status_code: String,
+        message: String,
+        data: %Schema{
+          type: :array,
+          items: %Schema{
+            type: :object,
+            properties: %{
+              id: String,
+              active: Boolean,
+              name: String,
+              game_hash: String,
+              app_id: String,
+              image_url: String,
+              play_mode: String
+            }
+          }
+        }
+      }
+    })
+  end
+
+  defmodule ListBannersResponse do
+    @moduledoc false
+
+    OpenApiSpex.schema(%{
+      title: "ListBannersResponse",
+      type: :object,
+      properties: %{
+        status_code: String,
+        message: String,
+        data: %Schema{
+          type: :array,
+          items: %Schema{
+            type: :object,
+            properties: %{
+              id: String,
+              active: Boolean,
+              name: String,
+              carousel_url: String,
+              display_url: String
+            }
+          }
         }
       }
     })

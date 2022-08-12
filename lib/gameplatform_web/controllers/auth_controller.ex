@@ -8,6 +8,7 @@ defmodule GameplatformWeb.AuthController do
   alias Gameplatform.Account
   alias GameplatformWeb.ApiSpec.Schema
   alias GameplatformWeb.Plugs.UserAuth, as: AuthPlug
+  alias GameplatformWeb.Utils
 
   plug OpenApiSpex.Plug.CastAndValidate, json_render_error_v2: true
 
@@ -41,7 +42,8 @@ defmodule GameplatformWeb.AuthController do
 
     case Auth.send_otp_to_user(params) do
       {:ok, body} ->
-        json(conn, body)
+        resp = Utils.make_response("OK", "OTP sent successfully -  #{body.data.code}")
+        json(conn, resp)
 
       {:error, status_code, error} ->
         conn
@@ -76,16 +78,19 @@ defmodule GameplatformWeb.AuthController do
 
     with {:ok, true} <- Auth.verify_otp(params),
          {:ok, user} <- Account.get_current_user(params) do
-      conn
-      |> AuthPlug.log_in_user(user, %{"remember_me" => "true"})
-      |> json(%{result: "success"})
+      auth_token = AuthPlug.get_auth_token(user)
+
+      resp =
+        Utils.make_response("OK", "SignIn Successful", %{token: auth_token, user_id: user.id})
+
+      json(conn, resp)
     else
       {:error, status_code, error} ->
         conn
         |> put_status(status_code)
         |> json(%{errors: error})
 
-      _ ->
+      _err ->
         conn
         |> put_status(500)
         |> json(%{error: "to parse changeset and check error code"})

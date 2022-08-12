@@ -1,4 +1,7 @@
 defmodule Gameplatform.Client.TwilioClient do
+  @moduledoc """
+  Module to send otp messages to user.
+  """
   use Tesla
 
   @callback send_sms(String.t(), String.t()) :: {:ok, map()} | {:error, any()}

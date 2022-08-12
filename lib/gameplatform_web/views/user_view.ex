@@ -2,9 +2,10 @@ defmodule GameplatformWeb.UserView do
   use GameplatformWeb, :view
 
   alias GameplatformWeb.ApiSpec.Schema
+  alias GameplatformWeb.Utils
 
   def render("user.json", %{user: user}) do
-    %Schema.ResponseGetProfile{
+    %{
       user_profile: extract_user_profile(user.user_profiles),
       user_wallets: parse_user_wallets(user.user_profiles.user_wallets)
     }
@@ -31,14 +32,13 @@ defmodule GameplatformWeb.UserView do
 
   defp extract_user_profile(user_profiles) do
     Map.take(user_profiles, [
-      :id,
       :email,
       :first_name,
+      :second_name,
       :kyc_status,
       :phone_number,
-      :second_name,
-      :updated_at,
-      :inserted_at
+      :gender,
+      :image
     ])
   end
 end
