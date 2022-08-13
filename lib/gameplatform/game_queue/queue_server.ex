@@ -13,20 +13,25 @@ defmodule Gameplatform.GameQueue.QueueServer do
 
   def init(init_arg) do
     game_queue = GameQueue.new(init_arg)
-    {:ok, %{queue: game_queue}}
+    {:ok, %{queue: game_queue}, {:continue, :poll_users}}
   end
 
-  def handle_info(:timeout, state) do
-    new_state = state
-    {:noreply, new_state}
+  def handle_continue(:poll_users, state) do
+    newstate = poll_users(state)
+    schedule_polling()
+    IO.inspect(state.queue.users, label: "hi")
+    {:noreply, newstate}
+  end
+
+  def handle_info(:poll_users, state) do
+    {:noreply, state, {:continue, :poll_users}}
   end
 
   def handle_call({:add_user, user_id, amount}, _from, %{queue: queue} = state) do
     queue_amount = GameQueue.get_queue_amount(queue)
-    IO.inspect([queue_amount, amount])
 
     if Decimal.eq?(queue_amount, amount) do
-      new_queue = GameQueue.add_to_queue(queue, user_id)
+      new_queue = GameQueue.add_user_to_queue(queue, user_id)
       new_state = update_state(state, new_queue)
       reply = {:ok, :user_added}
       {:reply, reply, new_state}
@@ -38,5 +43,16 @@ defmodule Gameplatform.GameQueue.QueueServer do
 
   defp update_state(state, new_queue) do
     %{state | queue: new_queue}
+  end
+
+  defp poll_users(%{queue: queue} = state) do
+    response = GameQueue.get_from_queue(queue, 1)
+    %{new_queue: new_queue, users: users} = response
+    IO.inspect(users)
+    update_state(state, new_queue)
+  end
+
+  def schedule_polling do
+    Process.send_after(self(), :poll_users, 3_000)
   end
 end

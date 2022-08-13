@@ -33,10 +33,17 @@ defmodule Gameplatform.GameQueue.Model.GameQueue do
   @spec get_queue_amount(queue :: GameQueue.t()) :: Decimal.t()
   def get_queue_amount(queue), do: queue.amount
 
-  @spec add_to_queue(queue :: GameQueue.t(), any()) :: GameQueue.t()
-  def add_to_queue(queue, user_id) do
+  @spec add_user_to_queue(queue :: GameQueue.t(), any()) :: GameQueue.t()
+  def add_user_to_queue(queue, user_id) do
     Map.update(queue, :users, [], fn existing_users ->
       existing_users ++ [user_id]
     end)
+  end
+
+  @spec get_from_queue(queue :: GameQueue.t(), number()) :: map()
+  def get_from_queue(queue, num_of_users) do
+    {users, new_users} = Enum.split(queue.users, num_of_users)
+    new_queue = %{queue | users: new_users}
+    %{new_queue: new_queue, users: users}
   end
 end
