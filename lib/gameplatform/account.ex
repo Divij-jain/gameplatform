@@ -46,9 +46,9 @@ defmodule Gameplatform.Account do
 
   defp create_user_wallets(attrs) do
     with {:ok, user_wallet_1} <-
-           Repo.create_user_wallet(Map.put(attrs, :wallet_type, "winnings")),
+           Repo.create_user_wallet(Map.put(attrs, :wallet_type, "user_wallet")),
          {:ok, user_wallet_2} <-
-           Repo.create_user_wallet(Map.put(attrs, :wallet_type, "deposits")) do
+           Repo.create_user_wallet(Map.put(attrs, :wallet_type, "promotional_wallet")) do
       {:ok, %{wallet_1: user_wallet_1, wallet_2: user_wallet_2}}
     end
   end

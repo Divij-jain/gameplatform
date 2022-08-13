@@ -76,27 +76,38 @@ defmodule Gameplatform.UserWorker do
     {:noreply, new_state, @timeout}
   end
 
-  defp get_profile(user) do
+  def get_profile(user) do
     %{
       user_profile: extract_user_profile(user.user_profiles),
-      user_wallets: parse_user_wallets(user.user_profiles.user_wallets)
+      user_wallets: parse_user_wallets(user.user_profiles.user_wallets, [])
     }
   end
 
-  defp parse_user_wallets(%_{} = user_wallet) do
-    extract_user_wallet(user_wallet)
+  def get_user_wallet_txs(profile) do
+    wallet = get_wallet(profile.user_wallets, "user_wallet")
+
+    case wallet do
+      nil ->
+        []
+
+      wallet ->
+        wallet.user_wallet_txs
+    end
   end
 
-  defp parse_user_wallets([]), do: []
+  defp parse_user_wallets([], acc), do: acc
 
-  defp parse_user_wallets([user_wallet | _user_wallets]) do
-    parse_user_wallets(user_wallet)
+  defp parse_user_wallets([user_wallet | tail_user_wallets], acc) do
+    acc2 = [extract_user_wallet(user_wallet)] ++ acc
+    parse_user_wallets(tail_user_wallets, acc2)
   end
 
   defp extract_user_wallet(user_wallet) do
     Map.take(user_wallet, [
       :id,
       :user_wallet,
+      :wallet_type,
+      :user_wallet_txs,
       :updated_at,
       :inserted_at
     ])
@@ -112,5 +123,11 @@ defmodule Gameplatform.UserWorker do
       :gender,
       :image
     ])
+  end
+
+  defp get_wallet(wallets, wallet_type) do
+    Enum.find(wallets, nil, fn wallet ->
+      wallet.wallet_type == wallet_type
+    end)
   end
 end
