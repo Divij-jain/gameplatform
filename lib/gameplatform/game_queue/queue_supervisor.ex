@@ -61,8 +61,8 @@ defmodule Gameplatform.GameQueue.QueueSupervisor do
     |> String.to_atom()
   end
 
-  def add_user_to_queue(args) do
-    %{user_id: user_id, game_id: game_id, sku_code: sku_code, amount: amount} = args
+  def add_user_to_queue(payload, user_id) do
+    %{"game_id" => game_id, "sku_code" => sku_code, "amount" => amount} = payload
     name = get_queue_registration_name(game_id, sku_code)
     call_message(name, {:add_user, user_id, amount})
   end

@@ -19,7 +19,7 @@ defmodule Gameplatform.GameQueue.QueueServer do
   def handle_continue(:poll_users, state) do
     newstate = poll_users(state)
     schedule_polling()
-    IO.inspect(state.queue.users, label: "hi")
+    # IO.inspect(state.queue.users, label: "hi")
     {:noreply, newstate}
   end
 
@@ -47,8 +47,8 @@ defmodule Gameplatform.GameQueue.QueueServer do
 
   defp poll_users(%{queue: queue} = state) do
     response = GameQueue.get_from_queue(queue, 1)
-    %{new_queue: new_queue, users: users} = response
-    IO.inspect(users)
+    %{new_queue: new_queue, users: _users} = response
+    # IO.inspect(users)
     update_state(state, new_queue)
   end
 

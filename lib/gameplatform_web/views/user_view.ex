@@ -1,9 +1,6 @@
 defmodule GameplatformWeb.UserView do
   use GameplatformWeb, :view
 
-  alias GameplatformWeb.ApiSpec.Schema
-  alias GameplatformWeb.Utils
-
   def render("user.json", %{user: user}) do
     %{
       user_profile: extract_user_profile(user.user_profiles),

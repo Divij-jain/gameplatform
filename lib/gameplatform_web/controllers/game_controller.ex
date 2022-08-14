@@ -28,7 +28,7 @@ defmodule GameplatformWeb.GameController do
 
   def list_games(conn, _params) do
     games = Game.get_active_games()
-    games = Enum.map(games, &Utils.schema_struct_to_map/1)
+    games = Enum.map(games, &Utils.to_json/1)
     resp = Utils.make_response("OK", "", games)
     json(conn, resp)
   end
@@ -47,7 +47,7 @@ defmodule GameplatformWeb.GameController do
 
   def list_banners(conn, _params) do
     banners = Game.get_active_banners()
-    banners = Enum.map(banners, &Utils.schema_struct_to_map/1)
+    banners = Enum.map(banners, &Utils.to_json/1)
     resp = Utils.make_response("OK", "", banners)
     json(conn, resp)
   end

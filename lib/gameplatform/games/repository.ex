@@ -7,8 +7,7 @@ defmodule Gameplatform.Games.Repository do
 
   def get_active_games() do
     Game
-    |> where([g], g.active == true)
-    |> order_by([g], g.id)
+    |> Queries.get_active_games()
     |> Repo.all()
   end
 

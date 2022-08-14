@@ -19,9 +19,36 @@ defmodule Gameplatform.UserSupervisor do
     DynamicSupervisor.init(strategy: :one_for_one)
   end
 
+  # def make_cast_to_child(user_id, user_channel, payload) do
+  #   with {:ok, process_pid} when process_pid != nil <- get_child_pid(user_channel),
+  #        true <- is_child_alive(process_pid) do
+  #     GenServer.cast(:erlang.list_to_pid(to_charlist(process_pid)), payload)
+  #     :ok
+  #   else
+  #     _ ->
+  #       {:error, :reconnect_client}
+  #   end
+  # end
+
+  def call_message(user_channel, payload) do
+    with {:ok, process_pid} when process_pid != nil <- get_child_pid(user_channel),
+         true <- is_child_alive(process_pid) do
+      GenServer.call(:erlang.list_to_pid(to_charlist(process_pid)), payload)
+    else
+      {:ok, nil} ->
+        {:error, :reconnect_client}
+
+      false ->
+        {:error, :reconnect_client}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
   def start_children(user_id, user_channel) do
-    with {:ok, process_pid} when process_pid != nil <- Cache.get_value_from_cache(user_channel),
-         true <- Process.alive?(:erlang.list_to_pid(to_charlist(process_pid))) do
+    with {:ok, process_pid} when process_pid != nil <- get_child_pid(user_channel),
+         true <- is_child_alive(process_pid) do
       GenServer.cast(:erlang.list_to_pid(to_charlist(process_pid)), :initialise_login)
       :ok
     else
@@ -38,6 +65,11 @@ defmodule Gameplatform.UserSupervisor do
         {:error, "unknown error"}
     end
   end
+
+  defp is_child_alive(process_pid),
+    do: Process.alive?(:erlang.list_to_pid(to_charlist(process_pid)))
+
+  defp get_child_pid(user_channel), do: Cache.get_value_from_cache(user_channel)
 
   defp start_child(user_id, user_channel) do
     child_spec = %{

@@ -13,6 +13,8 @@ defmodule Gameplatform.Repo.Migrations.CreateSkuTable do
     create_if_not_exists table("game_skus") do
       add :game_id, references("games"), null: false
       add :sku_code, :string, null: false
+      add :sku_name, :string, null: false
+      add :sku_image, :string, null: false
       add :amount, :float, default: 0
       add :active, :boolean, default: true
 
@@ -22,5 +24,7 @@ defmodule Gameplatform.Repo.Migrations.CreateSkuTable do
         null: false
       )
     end
+
+    create unique_index(:game_skus, [:sku_code])
   end
 end

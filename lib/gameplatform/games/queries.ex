@@ -15,4 +15,11 @@ defmodule Gameplatform.Games.Queries do
       preload: [game_skus: gamesku]
     )
   end
+
+  def get_active_games(query) do
+    query
+    |> where([g], g.active == true)
+    |> order_by([g], g.id)
+    |> preload([:game_skus])
+  end
 end
