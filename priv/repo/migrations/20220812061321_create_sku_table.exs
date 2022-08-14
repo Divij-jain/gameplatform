@@ -17,6 +17,7 @@ defmodule Gameplatform.Repo.Migrations.CreateSkuTable do
       add :sku_image, :string, null: false
       add :amount, :float, default: 0
       add :active, :boolean, default: true
+      add :num_players, :integer, null: false, default: 2
 
       timestamps(
         type: :utc_datetime,

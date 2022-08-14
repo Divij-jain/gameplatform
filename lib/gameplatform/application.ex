@@ -26,7 +26,9 @@ defmodule Gameplatform.Application do
       # Redix pool supervisor
       caching_supervisor,
       # QueueSupervisor
-      {Gameplatform.GameQueue.QueueSupervisor, []}
+      {Gameplatform.GameQueue.QueueSupervisor, []},
+      {Registry, keys: :unique, name: Gameplatform.GameRegistry},
+      {Gameplatform.Runtime.GameSupervisor, []}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -44,8 +44,10 @@ defmodule Gameplatform.GameQueue.QueueSupervisor do
             QueueServer,
             %{
               game_id: game_id,
+              app_id: game_with_sku.app_id,
               sku_code: sku_code,
               amount: game_sku.amount,
+              num_players: game_sku.num_players,
               name: get_queue_registration_name(game_id, sku_code)
             }
           },
