@@ -3,7 +3,7 @@ defmodule Gameplatform.Accounts.Changesets.UserWalletTx do
 
   alias Gameplatform.Accounts.Schema.UserWalletTx
 
-  @params_required ~w(id wallet_type user_profile_id)a
+  @params_required ~w(meta_tx_id user_wallet_id amount tx_type)a
   @params_optional ~w()a
 
   def build(user_wallet_tx \\ %UserWalletTx{}, attrs)

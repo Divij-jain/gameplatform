@@ -4,7 +4,7 @@ defmodule Gameplatform.Accounts.Repository do
   """
   alias Gameplatform.Repo
   alias Gameplatform.Accounts.Changesets
-  alias Gameplatform.Accounts.Schema.User
+  alias Gameplatform.Accounts.Schema.{User, UserWalletTx}
   alias Gameplatform.Accounts.Queries
   alias Gameplatform.Ecto.ChangesetErrorTranslator
 
@@ -17,6 +17,19 @@ defmodule Gameplatform.Accounts.Repository do
     |> Queries.user_query()
     |> Repo.one()
     |> handle_result()
+  end
+
+  def get_wallet_balance(wallet_id) do
+    UserWalletTx
+    |> Queries.match_user_wallet_id(wallet_id)
+    |> Repo.aggregate(:sum, :amount)
+    |> case do
+      nil ->
+        Decimal.new(0)
+
+      balance ->
+        balance
+    end
   end
 
   def create_new_user(attrs) do
@@ -34,6 +47,12 @@ defmodule Gameplatform.Accounts.Repository do
   def create_user_wallet(attrs) do
     attrs
     |> Changesets.UserWallet.build()
+    |> Repo.insert()
+  end
+
+  def create_wallet_tx(attrs) do
+    attrs
+    |> Changesets.UserWalletTx.build()
     |> Repo.insert()
   end
 

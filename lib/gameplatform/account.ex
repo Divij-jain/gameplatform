@@ -44,6 +44,24 @@ defmodule Gameplatform.Account do
     end
   end
 
+  def add_money_to_wallet(attrs) do
+    Repo.create_wallet_tx(attrs)
+  end
+
+  @moduledoc """
+  Later turn this function into Repo.transaction
+  """
+  def deduct_money_from_wallet(attrs) do
+    with amount <- Repo.get_wallet_balance(attrs.user_wallet_id),
+         new_amount <- Decimal.add(amount, attrs.amount),
+         false <- Decimal.negative?(new_amount) do
+      Repo.create_wallet_tx(attrs)
+    else
+      true ->
+        {:error, :not_enogh_balance}
+    end
+  end
+
   defp create_user_wallets(attrs) do
     with {:ok, user_wallet_1} <-
            Repo.create_user_wallet(Map.put(attrs, :wallet_type, "user_wallet")),

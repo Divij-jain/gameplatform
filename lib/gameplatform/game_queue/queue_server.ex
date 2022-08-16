@@ -5,7 +5,7 @@ defmodule Gameplatform.GameQueue.QueueServer do
   use GenServer
 
   alias Gameplatform.GameQueue.Model.GameQueue
-  alias Gameplatform.GameSupervisor
+  alias Gameplatform.Runtime.GameSupervisor
 
   # The polling is fixed for the event to happen at exact time due to handle_continue
   @polling_time 1000
@@ -45,7 +45,6 @@ defmodule Gameplatform.GameQueue.QueueServer do
   defp update_state(state, new_queue) do
     %{state | queue: new_queue}
   end
-
 
   defp poll_users(%{queue: %GameQueue{} = queue} = state) do
     required_num_users = queue.req_num_players

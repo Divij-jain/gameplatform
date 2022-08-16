@@ -18,6 +18,7 @@ defmodule Gameplatform.Games.Repository do
     |> Repo.all()
   end
 
+  @spec get_sku_list_for_all_games :: any
   def get_sku_list_for_all_games() do
     Game
     |> Queries.get_all_games_with_sku_list()

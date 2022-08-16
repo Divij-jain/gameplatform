@@ -83,6 +83,24 @@ defmodule Gameplatform.UserWorker do
     end
   end
 
+  def handle_call({:adding_user_to_game, args}, _from, state) do
+    amount = Map.get(args, :amount)
+
+    # later to add active table as well
+
+    state
+    |> remove_active_queue_table()
+    |> update_balance_for_user(amount, "user_wallet")
+    |> case do
+      {:ok, new_state} ->
+        {:reply, {:ok, :ok}, new_state, @timeout}
+
+      error ->
+        reply = error
+        {:reply, reply, state, @timeout}
+    end
+  end
+
   @impl true
   def terminate(reason, state) do
     Cache.delete_value_from_cache(state.user_channel)
@@ -108,6 +126,10 @@ defmodule Gameplatform.UserWorker do
 
   defp check_active_queue_table(%{active_queue: nil, active_game: nil}), do: nil
   defp check_active_queue_table(_), do: {:error, "Already joined on a game!"}
+
+  def remove_active_queue_table(state) do
+    %{state | active_queue: nil}
+  end
 
   defp initialise_login(state) do
     banners = send_banners(state)
@@ -201,6 +223,78 @@ defmodule Gameplatform.UserWorker do
       user_profile: Utils.to_json(user.user_profiles),
       user_wallets: Enum.map(user.user_profiles.user_wallets, &Utils.to_json/1)
     }
+  end
+
+  defp update_balance_for_user(state, amount, wallet_type) do
+    case Decimal.compare(amount, 0) do
+      :gt ->
+        case get_wallet(state.profile.user_wallets, wallet_type) do
+          nil ->
+            {:error, :no_Wallet_found}
+
+          wallet ->
+            attrs = %{
+              amount: amount,
+              user_wallet_id: wallet.id,
+              meta_tx_id: Ecto.UUID.generate(),
+              tx_type: :credit
+            }
+
+            Account.add_money_to_wallet(attrs)
+        end
+
+      _ ->
+        case check_user_balance(amount, state.profile) do
+          :ok ->
+            case get_wallet(state.profile.user_wallets, wallet_type) do
+              nil ->
+                {:error, :no_Wallet_found}
+
+              wallet ->
+                attrs = %{
+                  amount: amount,
+                  user_wallet_id: wallet.id,
+                  meta_tx_id: Ecto.UUID.generate(),
+                  tx_type: :debit
+                }
+
+                Account.deduct_money_from_wallet(attrs)
+            end
+
+          _ ->
+            {:error, :not_enough_balance}
+        end
+    end
+    |> case do
+      {:ok, tx} ->
+        {:ok, add_tx_to_profile(state, wallet_type, tx)}
+
+      error ->
+        error
+    end
+  end
+
+  def add_tx_to_profile(state, wallet_type, tx) do
+    wallet = get_wallet(state.profile.user_wallets, wallet_type)
+    new_wallet_txs = wallet.user_wallet_txs ++ [tx]
+    new_wallet = %{wallet | user_wallet_txs: new_wallet_txs}
+
+    new_profile = %{
+      state.profile
+      | user_wallets: update_wallets(state.profile.user_wallets, new_wallet)
+    }
+
+    %{state | profile: new_profile}
+  end
+
+  def update_wallets(user_wallets, new_wallet) do
+    Enum.reduce(user_wallets, [], fn wallet, acc ->
+      if wallet.wallet_type == new_wallet.wallet_type do
+        acc ++ [new_wallet]
+      else
+        acc ++ [wallet]
+      end
+    end)
   end
 
   # defp parse_user_wallets([], acc), do: acc
