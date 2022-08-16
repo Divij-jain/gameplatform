@@ -47,7 +47,8 @@ defmodule Gameplatform.Runtime.GameServer do
       Enum.reduce(players, state.players, fn user_id, acc ->
         case UserSupervisor.call_message(user_id, {:adding_user_to_game, args}) do
           {:ok, %{user_channel: user_channel}} ->
-            acc ++ [%{user_id: user_id, user_channel: user_channel}]
+            player = Game.Player.new(%{user_id: user_id, user_channel: user_channel})
+            acc ++ [player]
 
           {:error, _} ->
             acc
