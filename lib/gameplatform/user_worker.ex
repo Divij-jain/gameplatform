@@ -9,6 +9,7 @@ defmodule Gameplatform.UserWorker do
   alias Gameplatform.Cache
   alias Gameplatform.Game
   alias Gameplatform.GameQueue.QueueSupervisor
+  alias Gameplatform.UserSupervisor
   alias GameplatformWeb.Utils
 
   # main_app:user:
@@ -33,14 +34,18 @@ defmodule Gameplatform.UserWorker do
   end
 
   @impl true
-  def init([user_id, user_channel]),
-    do:
-      {:ok, %{@initial_state | user_id: user_id, user_channel: user_channel},
-       {:continue, user_channel}}
+  def init([user_id, user_channel]) do
+    IO.inspect([user_id, user_channel], label: "init")
+
+    {:ok, %{@initial_state | user_id: user_id, user_channel: user_channel},
+     {:continue, :intialise}}
+  end
 
   @impl true
-  def handle_continue(user_channel, state) do
-    case Cache.set_key_in_cache(user_channel, :erlang.pid_to_list(self())) do
+  def handle_continue(:intialise, state) do
+    process_identifier = UserSupervisor.get_proc_identifier(state.user_id)
+
+    case Cache.set_key_in_cache(process_identifier, :erlang.pid_to_list(self())) do
       {:ok, "OK"} ->
         initialise_login(state)
 
@@ -93,7 +98,7 @@ defmodule Gameplatform.UserWorker do
     |> update_balance_for_user(amount, "user_wallet")
     |> case do
       {:ok, new_state} ->
-        player = %{user_channel: user_channel}
+        player = %{user_channel: new_state.user_channel}
         {:reply, {:ok, player}, new_state, @timeout}
 
       error ->

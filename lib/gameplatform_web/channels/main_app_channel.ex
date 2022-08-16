@@ -29,7 +29,7 @@ defmodule GameplatformWeb.MainAppChannel do
     user_id = socket.assigns.user_id
 
     case UserSupervisor.call_message(
-           @channel_prefix <> to_string(user_id),
+           user_id,
            {:game_join, payload, user_id}
          ) do
       {:error, :reconnect_client} ->

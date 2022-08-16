@@ -30,7 +30,8 @@ defmodule Gameplatform.Runtime.GameSupervisor do
         :ok
 
       error ->
-        Logger.error("Unable to start game server process for game with error - #{error}")
+        IO.inspect(error)
+        Logger.error("Unable to start game server process for game with error ")
         error
     end
   end

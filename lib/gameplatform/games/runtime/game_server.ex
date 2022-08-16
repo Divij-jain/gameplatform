@@ -8,9 +8,8 @@ defmodule Gameplatform.Runtime.GameServer do
   # alias Gameplatform.Runtime.FlappyBirds
   alias Gameplatform.UserSupervisor
   alias Gameplatform.Games.Runtime.Model.Game
-  alias GameplatformWeb.Utils
 
-  def start_link(args) do
+  def start_link([args]) do
     table_id = create_table_id()
     args = Map.put(args, :table_id, table_id)
     GenServer.start_link(__MODULE__, args, name: via(table_id))
@@ -64,7 +63,8 @@ defmodule Gameplatform.Runtime.GameServer do
       players: extract_players(state.players)
     }
 
-    json_data = Utils.to_json(data)
+    # Utils.to_json(data)
+    json_data = Jason.encode(data)
 
     Enum.each(state.players, fn player ->
       GameplatformWeb.Endpoint.broadcast(player.user_channel, "main_app:game_info", json_data)
