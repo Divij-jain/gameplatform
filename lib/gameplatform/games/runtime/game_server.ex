@@ -7,24 +7,18 @@ defmodule Gameplatform.Runtime.GameServer do
 
   # alias Gameplatform.Runtime.FlappyBirds
   alias Gameplatform.UserSupervisor
+  alias Gameplatform.Games.Runtime.Model.Game
 
   def start_link(args) do
     table_id = create_table_id()
+    args = Map.put(args, :table_id, table_id)
     GenServer.start_link(__MODULE__, args, name: via(table_id))
   end
 
   def init(args) do
     # module_name = get_game(args) |> get_module_name_for_state()
     players = args.players
-
-    state = %{
-      game_id: args.game_id,
-      app_id: args.app_id,
-      sku_code: args.sku_code,
-      num_required_players: args.req_num_players,
-      amount: args.amount,
-      players: []
-    }
+    state = Game.new(args)
 
     new_state = add_players_to_game(players, state)
 
@@ -46,7 +40,7 @@ defmodule Gameplatform.Runtime.GameServer do
     "#{id}_#{node}"
   end
 
-  defp add_players_to_game(players, state) do
+  defp add_players_to_game(players, %Game{} = state) do
     args = Map.take(state, [:app_id, :game_id, :amount, :sku_code])
 
     new_players =
