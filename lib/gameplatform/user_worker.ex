@@ -93,7 +93,8 @@ defmodule Gameplatform.UserWorker do
     |> update_balance_for_user(amount, "user_wallet")
     |> case do
       {:ok, new_state} ->
-        {:reply, {:ok, :ok}, new_state, @timeout}
+        player = %{user_channel: user_channel}
+        {:reply, {:ok, player}, new_state, @timeout}
 
       error ->
         reply = error

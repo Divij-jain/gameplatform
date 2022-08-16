@@ -8,6 +8,7 @@ defmodule Gameplatform.Runtime.GameServer do
   # alias Gameplatform.Runtime.FlappyBirds
   alias Gameplatform.UserSupervisor
   alias Gameplatform.Games.Runtime.Model.Game
+  alias GameplatformWeb.Utils
 
   def start_link(args) do
     table_id = create_table_id()
@@ -21,7 +22,7 @@ defmodule Gameplatform.Runtime.GameServer do
     state = Game.new(args)
 
     new_state = add_players_to_game(players, state)
-
+    send_game_info_to_players(state)
     {:ok, new_state}
   end
 
@@ -41,13 +42,13 @@ defmodule Gameplatform.Runtime.GameServer do
   end
 
   defp add_players_to_game(players, %Game{} = state) do
-    args = Map.take(state, [:app_id, :game_id, :amount, :sku_code])
+    args = Map.take(state, [:app_id, :game_id, :amount, :sku_code, :table_id])
 
     new_players =
-      Enum.reduce(players, state.players, fn player, acc ->
-        case UserSupervisor.call_message(player, {:adding_user_to_game, args}) do
-          {:ok, _} ->
-            acc ++ [player]
+      Enum.reduce(players, state.players, fn user_id, acc ->
+        case UserSupervisor.call_message(user_id, {:adding_user_to_game, args}) do
+          {:ok, %{user_channel: user_channel}} ->
+            acc ++ [%{user_id: user_id, user_channel: user_channel}]
 
           {:error, _} ->
             acc
@@ -55,6 +56,23 @@ defmodule Gameplatform.Runtime.GameServer do
       end)
 
     %{state | players: new_players}
+  end
+
+  defp send_game_info_to_players(%Game{} = state) do
+    data = %{
+      table_id: state.table_id,
+      players: extract_players(state.players)
+    }
+
+    json_data = Utils.to_json(data)
+
+    Enum.each(state.players, fn player ->
+      GameplatformWeb.Endpoint.broadcast(player.user_channel, "main_app:game_info", json_data)
+    end)
+  end
+
+  def extract_players(players) do
+    players
   end
 
   # defp get_game(opts) do
