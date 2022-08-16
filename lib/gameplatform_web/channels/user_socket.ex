@@ -10,9 +10,12 @@ defmodule GameplatformWeb.UserSocket do
   alias Gameplatform.Auth.Token.TokenClient
 
   @impl true
-  def connect(%{"token" => token} = _params, socket, _connect_info) do
-    case TokenClient.get_user_id_by_jwt_token(token) do
+  def connect(%{"token" => token} = params, socket, _connect_info) do
+    IO.inspect(params)
+
+    case TokenClient.get_user_id_by_jwt_token(Jason.decode!(token)) do
       nil ->
+        IO.inspect("here")
         :error
 
       user_id ->

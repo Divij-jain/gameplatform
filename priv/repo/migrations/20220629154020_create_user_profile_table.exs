@@ -4,6 +4,7 @@ defmodule Gameplatform.Repo.Migrations.CreateUserProfileTable do
   def up do
     create_user_profile_table()
     create_user_wallet_table()
+
     create_user_wallet_tx_table()
   end
 
@@ -53,7 +54,8 @@ defmodule Gameplatform.Repo.Migrations.CreateUserProfileTable do
     create_if_not_exists table("user_wallet_txs") do
       add :meta_tx_id, :uuid, null: false
       add :user_wallet_id, references("user_wallets"), null: false
-      add :amount, :float, default: 0
+      add :amount, :decimal, default: 0
+      add :tx_type, :string, null: false
 
       timestamps(
         type: :utc_datetime_usec,

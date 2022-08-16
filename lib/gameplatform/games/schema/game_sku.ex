@@ -9,6 +9,8 @@ defmodule Gameplatform.Games.Schema.GameSku do
     field :sku_image, :string
     field :amount, :decimal
     field :active, :boolean
+    field :num_players, :integer
+
     timestamps(type: :utc_datetime)
 
     belongs_to :game, Game

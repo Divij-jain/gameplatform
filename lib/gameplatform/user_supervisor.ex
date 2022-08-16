@@ -30,8 +30,8 @@ defmodule Gameplatform.UserSupervisor do
   #   end
   # end
 
-  def call_message(user_channel, payload) do
-    with {:ok, process_pid} when process_pid != nil <- get_child_pid(user_channel),
+  def call_message(user_id, payload) do
+    with {:ok, process_pid} when process_pid != nil <- get_child_pid(user_id),
          true <- is_child_alive(process_pid) do
       GenServer.call(:erlang.list_to_pid(to_charlist(process_pid)), payload)
     else
@@ -47,7 +47,7 @@ defmodule Gameplatform.UserSupervisor do
   end
 
   def start_children(user_id, user_channel) do
-    with {:ok, process_pid} when process_pid != nil <- get_child_pid(user_channel),
+    with {:ok, process_pid} when process_pid != nil <- get_child_pid(user_id),
          true <- is_child_alive(process_pid) do
       GenServer.cast(:erlang.list_to_pid(to_charlist(process_pid)), :initialise_login)
       :ok
@@ -66,10 +66,15 @@ defmodule Gameplatform.UserSupervisor do
     end
   end
 
+  def get_proc_identifier(user_id), do: "user_process_#{user_id}"
+
   defp is_child_alive(process_pid),
     do: Process.alive?(:erlang.list_to_pid(to_charlist(process_pid)))
 
-  defp get_child_pid(user_channel), do: Cache.get_value_from_cache(user_channel)
+  defp get_child_pid(user_id) do
+    name = get_proc_identifier(user_id)
+    Cache.get_value_from_cache(name)
+  end
 
   defp start_child(user_id, user_channel) do
     child_spec = %{

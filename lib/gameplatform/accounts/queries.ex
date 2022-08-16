@@ -32,4 +32,10 @@ defmodule Gameplatform.Accounts.Queries do
       where: user.id == ^user_id
     )
   end
+
+  def match_user_wallet_id(query, user_wallet_id) do
+    from(user_wallet_tx in query,
+      where: user_wallet_tx.user_wallet_id == ^user_wallet_id
+    )
+  end
 end
