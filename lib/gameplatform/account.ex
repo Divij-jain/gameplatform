@@ -1,7 +1,10 @@
 defmodule Gameplatform.Account do
   alias Gameplatform.Accounts.Repository, as: Repo
+  alias Gameplatform.Accounts.Schema.User
+  alias Gameplatform.ApiSpec.Schema.SubmitOtpRequest
   alias Gameplatform.Ecto.ChangesetErrorTranslator
 
+  @spec get_current_user(SubmitOtpRequest.t()) :: {:ok, User.t()} | {:error, map()}
   def get_current_user(attrs) do
     case check_existing_user(attrs) do
       %_{} = user ->

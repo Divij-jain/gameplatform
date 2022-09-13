@@ -5,17 +5,19 @@ defmodule Gameplatform.Games.Runtime.Model.Game do
 
   alias __MODULE__
 
-  defmodule Gameplatform.Games.Runtime.Model.Game.Player do
+  defmodule Player do
     @moduledoc """
     Defines the structure of game player
     """
 
+    alias __MODULE__
+
     defstruct [:user_id, :user_channel]
 
     @type t :: %__MODULE__{
-      user_id: integer(),
-      user_channel: String.t()
-    }
+            user_id: integer(),
+            user_channel: String.t()
+          }
 
     def new(args) do
       %{user_id: user_id, user_channel: user_channel} = args
@@ -25,7 +27,6 @@ defmodule Gameplatform.Games.Runtime.Model.Game do
         user_channel: user_channel
       }
     end
-
   end
 
   defstruct [:game_id, :app_id, :sku_code, :req_num_players, :amount, :players, :table_id]

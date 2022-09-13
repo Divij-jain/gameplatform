@@ -6,7 +6,7 @@ defmodule Gameplatform.Runtime.GameServer do
   """
 
   # alias Gameplatform.Runtime.FlappyBirds
-  alias Gameplatform.UserSupervisor
+  alias Gameplatform.Users.UserSupervisor
   alias Gameplatform.Games.Runtime.Model.Game
 
   def start_link([args]) do

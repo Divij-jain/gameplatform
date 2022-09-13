@@ -5,9 +5,14 @@ defmodule Gameplatform.Auth do
   alias Gameplatform.Auth.Otp
   alias Gameplatform.Cache
   alias Gameplatform.UserNotifier
+  alias Gameplatform.ApiSpec.Schema.{GetOtpRequest, SubmitOtpRequest}
 
   @otp_expiry 60
 
+  @doc """
+  sends otp text message to user
+  """
+  @spec send_otp_to_user(GetOtpRequest.t()) :: any()
   def send_otp_to_user(params) do
     to_number = get_user_phone_number(params)
 
@@ -20,6 +25,11 @@ defmodule Gameplatform.Auth do
     end
   end
 
+  @doc """
+  Verify otp submitted by client
+  """
+  @spec verify_otp(SubmitOtpRequest.t()) ::
+          {:ok, true} | {:error, status_code :: number(), reason :: String.t()}
   def verify_otp(params) do
     to_number = get_user_phone_number(params)
     otp = params.otp
@@ -60,12 +70,7 @@ defmodule Gameplatform.Auth do
   end
 
   defp check_for_an_existing_otp(key) do
-    try do
-      Cache.get_value_from_cache(key)
-    rescue
-      error ->
-        error
-    end
+    Cache.get_value_from_cache(key)
   end
 
   defp set_otp_in_redis(key, value, expiry_time),
@@ -77,7 +82,7 @@ defmodule Gameplatform.Auth do
   end
 
   defp create_body(code) do
-    %{status_code: "ok", data: %{code: code}}
+    "OTP for verification is #{code}"
   end
 
   defp handle_error(response) do

@@ -5,8 +5,9 @@ defmodule GameplatformWeb.AuthController do
 
   alias OpenApiSpex.Operation
   alias Gameplatform.Auth
+  alias Gameplatform.Auth.Token.TokenClient
   alias Gameplatform.Account
-  alias GameplatformWeb.ApiSpec.Schema
+  alias Gameplatform.ApiSpec.Schema
   alias GameplatformWeb.Plugs.UserAuth, as: AuthPlug
   alias GameplatformWeb.Utils
 
@@ -37,12 +38,12 @@ defmodule GameplatformWeb.AuthController do
     }
   end
 
-  def get_otp(%{body_params: body_params} = conn, _params) do
-    params = Map.from_struct(body_params)
+  def get_otp(conn, _params) do
+    body_params = Map.get(conn, :body_params)
 
-    case Auth.send_otp_to_user(params) do
+    case Auth.send_otp_to_user(body_params) do
       {:ok, body} ->
-        resp = Utils.make_response("OK", "OTP sent successfully -  #{body.data.code}")
+        resp = Utils.make_response("OK", body)
         json(conn, resp)
 
       {:error, status_code, error} ->
@@ -73,13 +74,12 @@ defmodule GameplatformWeb.AuthController do
     }
   end
 
-  def submit_otp(%{body_params: body_params} = conn, _params) do
-    params = Map.from_struct(body_params)
+  def submit_otp(conn, _params) do
+    body_params = Map.get(conn, :body_params)
 
-    with {:ok, true} <- Auth.verify_otp(params),
-         {:ok, user} <- Account.get_current_user(params) do
-      auth_token = AuthPlug.get_auth_token(user)
-
+    with {:ok, true} <- Auth.verify_otp(body_params),
+         {:ok, user} <- Account.get_current_user(body_params),
+         {:ok, auth_token} <- TokenClient.create_new_token(user) do
       resp =
         Utils.make_response("OK", "SignIn Successful", %{token: auth_token, user_id: user.id})
 

@@ -3,6 +3,21 @@ defmodule Gameplatform.Accounts.Schema.UserProfile do
 
   alias Gameplatform.Accounts.Schema.{User, UserWallet}
 
+  @type t() :: %__MODULE__{
+          id: number(),
+          phone_number: String.t(),
+          email: String.t(),
+          first_name: String.t(),
+          second_name: String.t(),
+          gender: String.t(),
+          image: String.t(),
+          kyc_status: boolean(),
+          inserted_at: DateTime.t(),
+          updated_at: DateTime.t(),
+          user_id: number(),
+          user_wallets: list(UserWallet.t())
+        }
+
   schema "user_profiles" do
     field :phone_number, :string
     field :email, :string

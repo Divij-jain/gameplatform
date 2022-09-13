@@ -1,4 +1,4 @@
-defmodule GameplatformWeb.ApiSpec.Schema do
+defmodule Gameplatform.ApiSpec.Schema do
   require OpenApiSpex
 
   alias OpenApiSpex.Schema

@@ -5,7 +5,7 @@ defmodule GameplatformWeb.UserController do
 
   alias Gameplatform.Account
   alias OpenApiSpex.Operation
-  alias GameplatformWeb.ApiSpec.Schema
+  alias Gameplatform.ApiSpec.Schema
 
   plug OpenApiSpex.Plug.CastAndValidate, json_render_error_v2: true
 
