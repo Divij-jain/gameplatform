@@ -138,17 +138,17 @@ defmodule GameplatformWeb.AuthControllerTest do
 
       json_response = send_request(conn, get_path, 200, get_body_params)
 
-      otp = json_response["otp"]
+      assert json_response["status_code"] == "OK"
+
+      otp = json_response["message"]["otp"]
 
       submit_body_params = %{"phone_number" => phone, "country_code" => "+91", "otp" => otp}
 
-      assert token_cookie =
-               conn
-               |> put_req_header("content-type", "application/json")
-               |> post(submit_path, submit_body_params)
-               |> get_cookie_from_conn("_gameplatform_web_user_token")
+      assert submit_json_response = send_request(conn, submit_path, 200, submit_body_params)
 
-      assert token_cookie != nil
+      assert submit_json_response["status_code"] == "OK"
+
+      assert submit_json_response["data"]["token"] != nil
     end
   end
 
