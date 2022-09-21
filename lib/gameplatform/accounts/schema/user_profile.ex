@@ -1,10 +1,12 @@
 defmodule Gameplatform.Accounts.Schema.UserProfile do
-  use Ecto.Schema
+  use Gameplatform.Schema
+
+  @moduledoc false
 
   alias Gameplatform.Accounts.Schema.{User, UserWallet}
 
   @type t() :: %__MODULE__{
-          id: number(),
+          id: Ecto.UUID.t(),
           phone_number: String.t(),
           email: String.t(),
           first_name: String.t(),
@@ -14,7 +16,7 @@ defmodule Gameplatform.Accounts.Schema.UserProfile do
           kyc_status: boolean(),
           inserted_at: DateTime.t(),
           updated_at: DateTime.t(),
-          user_id: number(),
+          user_id: Ecto.UUID.t(),
           user_wallets: list(UserWallet.t())
         }
 

@@ -1,4 +1,4 @@
-defmodule Gameplatform.Test.Support.Helpers.AuthHelper do
+defmodule Gameplatform.Test.Support.Helpers.Helper do
   @moduledoc """
   helper function module
   """
@@ -9,4 +9,6 @@ defmodule Gameplatform.Test.Support.Helpers.AuthHelper do
     |> Kernel.+(9_000_000_000)
     |> to_string()
   end
+
+  def get_indian_country_code, do: "+91"
 end

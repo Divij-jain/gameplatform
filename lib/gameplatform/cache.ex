@@ -1,4 +1,5 @@
 defmodule Gameplatform.Cache do
+  @moduledoc false
   alias Gameplatform.Cache.ApiToConfig
 
   @serv ApiToConfig.get_caching_client()

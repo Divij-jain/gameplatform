@@ -1,4 +1,6 @@
 defmodule GameplatformWeb.MainAppChannel do
+  @moduledoc false
+
   use GameplatformWeb, :channel
 
   alias Gameplatform.Users.UserSupervisor

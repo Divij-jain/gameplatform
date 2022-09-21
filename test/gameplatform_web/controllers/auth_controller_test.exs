@@ -1,7 +1,7 @@
 defmodule GameplatformWeb.AuthControllerTest do
   use GameplatformWeb.ConnCase, async: true
 
-  alias Gameplatform.Test.Support.Helpers.AuthHelper
+  alias Gameplatform.Test.Support.Helpers.Helper
 
   import Mox
 
@@ -10,7 +10,7 @@ defmodule GameplatformWeb.AuthControllerTest do
   describe "test for getOtp request" do
     setup %{conn: conn} do
       path = Routes.auth_path(conn, :get_otp)
-      phone = AuthHelper.get_random_mobile_no()
+      phone = Helper.get_random_mobile_no()
       {:ok, %{path: path, phone: phone}}
     end
 
@@ -66,7 +66,7 @@ defmodule GameplatformWeb.AuthControllerTest do
   describe "tests for submit otp" do
     setup %{conn: conn} do
       path = Routes.auth_path(conn, :submit_otp)
-      phone = AuthHelper.get_random_mobile_no()
+      phone = Helper.get_random_mobile_no()
       {:ok, %{path: path, phone: phone}}
     end
 
@@ -154,7 +154,7 @@ defmodule GameplatformWeb.AuthControllerTest do
 
   # describe "tests for logout user" do
   #   setup _ do
-  #     phone = AuthHelper.get_random_mobile_no()
+  #     phone = Helper.get_random_mobile_no()
   #     {:ok, %{phone: phone}}
   #   end
 

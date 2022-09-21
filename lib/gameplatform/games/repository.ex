@@ -1,4 +1,5 @@
 defmodule Gameplatform.Games.Repository do
+  @moduledoc false
   alias Gameplatform.Repo
   alias Gameplatform.Games.Queries
   alias Gameplatform.Games.Schema.{Game, Banner}

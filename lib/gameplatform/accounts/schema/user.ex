@@ -1,10 +1,12 @@
 defmodule Gameplatform.Accounts.Schema.User do
-  use Ecto.Schema
+  use Gameplatform.Schema
+
+  @moduledoc false
 
   alias Gameplatform.Accounts.Schema.UserProfile
 
   @type t() :: %__MODULE__{
-          id: number(),
+          id: Ecto.UUID.t(),
           phone_number: String.t(),
           country_code: String.t(),
           inserted_at: DateTime.t(),

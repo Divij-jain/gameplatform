@@ -1,10 +1,11 @@
 defmodule Gameplatform.Games.Schema.Game do
-  use Ecto.Schema
+  @moduledoc false
+  use Gameplatform.Schema
 
   alias Gameplatform.Games.Schema.GameSku
 
   @type t :: %__MODULE__{
-          id: number(),
+          id: Ecto.UUID.t(),
           name: String.t(),
           active: boolean(),
           game_hash: String.t(),

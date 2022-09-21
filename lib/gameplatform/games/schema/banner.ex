@@ -1,8 +1,10 @@
 defmodule Gameplatform.Games.Schema.Banner do
-  use Ecto.Schema
+  use Gameplatform.Schema
+
+  @moduledoc false
 
   @type t :: %__MODULE__{
-          id: number(),
+          id: Ecto.UUID.t(),
           name: String.t(),
           active: boolean(),
           carousel_url: String.t(),

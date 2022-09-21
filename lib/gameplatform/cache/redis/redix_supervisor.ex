@@ -1,4 +1,5 @@
 defmodule Gameplatform.Cache.Redis.RedixSupervisor do
+  @moduledoc false
   alias Gameplatform.Cache.ApiToConfig
 
   def child_spec(_args) do

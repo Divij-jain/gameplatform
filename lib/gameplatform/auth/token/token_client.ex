@@ -13,7 +13,7 @@ defmodule Gameplatform.Auth.Token.TokenClient do
   """
   @spec create_new_token(User.t()) ::
           {:ok, Joken.bearer_token()} | {:error, code :: number(), reason :: String.t()}
-  def create_new_token(user = %User{}) do
+  def create_new_token(%User{} = user) do
     claims = %{"user_id" => user.id}
 
     case Token.generate_and_sign(claims) do

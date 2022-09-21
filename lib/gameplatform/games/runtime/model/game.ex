@@ -10,8 +10,6 @@ defmodule Gameplatform.Games.Runtime.Model.Game do
     Defines the structure of game player
     """
 
-    alias __MODULE__
-
     defstruct [:user_id, :user_channel]
 
     @type t :: %__MODULE__{

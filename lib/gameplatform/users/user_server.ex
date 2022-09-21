@@ -58,8 +58,6 @@ defmodule Gameplatform.Users.UserServer do
         _from,
         state
       ) do
-    IO.inspect([game_id, sku_id], label: "checking type for incoming packets")
-
     with {:ok, amount} <- get_sku_amount(game_id, sku_id, state.games),
          :ok <- check_user_balance(amount, state.profile),
          nil <- check_active_queue_table(state),

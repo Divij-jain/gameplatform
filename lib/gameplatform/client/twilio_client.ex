@@ -24,6 +24,8 @@ defmodule Gameplatform.Client.TwilioClient do
       "MessagingServiceSid" => config(:messaging_service_sid)
     }
 
+    IO.inspect("this should not be printed in test and dev environment")
+
     "/Messages.json"
     |> post(body)
     |> handle_response()
