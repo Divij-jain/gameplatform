@@ -20,7 +20,7 @@ defmodule Gameplatform.Users.UserSupervisor do
     DynamicSupervisor.init(strategy: :one_for_one)
   end
 
-  @spec call_message(integer(), any()) :: :ok | any()
+  @spec call_message(Ecto.UUID.t(), any()) :: :ok | any()
   def call_message(user_id, payload) do
     case get_child_pid(user_id) do
       {:ok, pid} ->
@@ -34,7 +34,7 @@ defmodule Gameplatform.Users.UserSupervisor do
     end
   end
 
-  @spec start_user_process(integer(), String.t()) :: {:ok, pid()} | {:error, any()}
+  @spec start_user_process(Ecto.UUID.t(), String.t()) :: {:ok, pid()} | {:error, any()}
   def start_user_process(user_id, user_channel) do
     with nil <- get_child_pid(user_id),
          {:ok, pid} <- start_child(user_id, user_channel) do

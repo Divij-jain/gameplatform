@@ -80,6 +80,10 @@ config :gameplatform, Gameplatform.ApiToConfig,
   wallet_type_1: "user_wallet",
   wallet_type_2: "promotional_wallet"
 
+config :gameplatform, GameplatformWeb.ApiToConfig,
+  socket_identifier: "user_socket_",
+  channel_prefix: "main_app:user:"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

@@ -53,6 +53,7 @@ defmodule Gameplatform.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:tesla, "~> 1.4.0"},
       {:mox, "~> 1.0", only: :test},
+      {:mimic, "~> 1.7", only: :test},
       {:redix, "~> 1.1"},
       {:nimble_totp, "~> 0.1.0"},
       {:joken, "~> 2.4"},

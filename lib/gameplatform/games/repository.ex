@@ -6,12 +6,14 @@ defmodule Gameplatform.Games.Repository do
 
   import Ecto.Query
 
+  @spec get_active_games :: list(Game.t()) | []
   def get_active_games() do
     Game
     |> Queries.get_active_games()
     |> Repo.all()
   end
 
+  @spec get_active_banners :: list(Banner.t()) | []
   def get_active_banners() do
     Banner
     |> where([b], b.active == true)
@@ -19,7 +21,7 @@ defmodule Gameplatform.Games.Repository do
     |> Repo.all()
   end
 
-  @spec get_sku_list_for_all_games :: any
+  @spec get_sku_list_for_all_games :: list(Game.t()) | []
   def get_sku_list_for_all_games() do
     Game
     |> Queries.get_all_games_with_sku_list()

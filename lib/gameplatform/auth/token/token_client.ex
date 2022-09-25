@@ -33,8 +33,8 @@ defmodule Gameplatform.Auth.Token.TokenClient do
       {:ok, claims} ->
         {:ok, Map.get(claims, "user_id")}
 
-      {:error, _} = error ->
-        Logger.error(error)
+      {:error, error} = _e ->
+        Logger.error("#{error}")
         nil
     end
   end

@@ -17,6 +17,9 @@ defmodule Gameplatform.Users.UserServer do
   @promotional_percentage 10
   @timeout 15_000
 
+  @type start_link :: %{user_id: Ecto.UUID.t(), user_channel: String.t()}
+
+  @spec start_link(start_link) :: :ignore | {:error, any} | {:ok, pid}
   def start_link(opts) do
     user_id = Map.get(opts, :user_id)
     GenServer.start_link(__MODULE__, opts, name: via(user_id))
