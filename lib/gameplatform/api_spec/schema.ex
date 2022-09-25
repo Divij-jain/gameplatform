@@ -1,4 +1,6 @@
-defmodule GameplatformWeb.ApiSpec.Schema do
+defmodule Gameplatform.ApiSpec.Schema do
+  @moduledoc false
+
   require OpenApiSpex
 
   alias OpenApiSpex.Schema
@@ -60,6 +62,8 @@ defmodule GameplatformWeb.ApiSpec.Schema do
   end
 
   defmodule CountryCode do
+    @moduledoc false
+
     OpenApiSpex.schema(%{
       type: :string,
       description: "Country code currently servicing for indian country only",
@@ -68,6 +72,8 @@ defmodule GameplatformWeb.ApiSpec.Schema do
   end
 
   defmodule Otp do
+    @moduledoc false
+
     OpenApiSpex.schema(%{
       type: :string,
       description: "OTP",
@@ -135,6 +141,8 @@ defmodule GameplatformWeb.ApiSpec.Schema do
   end
 
   defmodule GetOtpRequest do
+    @moduledoc false
+
     OpenApiSpex.schema(%{
       title: "GetOtpRequest",
       description: "POST body for sending an otp to user",
@@ -152,6 +160,8 @@ defmodule GameplatformWeb.ApiSpec.Schema do
   end
 
   defmodule SubmitOtpRequest do
+    @moduledoc false
+
     OpenApiSpex.schema(%{
       title: "SubmitOtpRequest",
       description: "POST body for verifying an otp submitted by user",

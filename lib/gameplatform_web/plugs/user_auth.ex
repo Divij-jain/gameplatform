@@ -11,16 +11,16 @@ defmodule GameplatformWeb.Plugs.UserAuth do
 
   alias Gameplatform.Auth.Token.TokenClient
 
-  def log_in_user(conn, user, params \\ %{}) do
-    token = get_auth_token(user)
+  # def log_in_user(conn, user, params \\ %{}) do
+  #   token = TokenClient.create_new_token(user)
 
-    conn
-    |> renew_session()
-    |> put_session(:user_token, token)
-    |> maybe_write_remember_me_cookie(token, params)
-  end
+  #   conn
+  #   |> renew_session()
+  #   |> put_session(:user_token, token)
+  #   |> maybe_write_remember_me_cookie(token, params)
+  # end
 
-  def get_auth_token(user, _params \\ %{}), do: TokenClient.create_new_token(user)
+  # def get_auth_token(user, _params \\ %{}), do: TokenClient.create_new_token(user)
 
   def log_out_user(conn) do
     conn

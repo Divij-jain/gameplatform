@@ -1,4 +1,5 @@
 defmodule Gameplatform.Accounts.Changesets.UserWalletTx do
+  @moduledoc false
   import Ecto.Changeset
 
   alias Gameplatform.Accounts.Schema.UserWalletTx
@@ -20,6 +21,7 @@ defmodule Gameplatform.Accounts.Changesets.UserWalletTx do
     user_wallet_tx
     |> cast(attrs, @params_required ++ @params_optional)
     |> validate_required(@params_required)
+    |> foreign_key_constraint(:user_wallet_id)
     |> Map.put(:repo_opts, source: %UserWalletTx{}.__meta__.source)
   end
 end

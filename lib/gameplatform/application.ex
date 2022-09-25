@@ -13,8 +13,6 @@ defmodule Gameplatform.Application do
     Gameplatform.Instrumentation.Instrumenter.setup!()
 
     children = [
-      # Start he user process supervisor
-      Gameplatform.UserSupervisor,
       # Start the Ecto repository
       Gameplatform.Repo,
       # Start the Telemetry supervisor
@@ -27,6 +25,11 @@ defmodule Gameplatform.Application do
       caching_supervisor,
       # QueueSupervisor
       {Gameplatform.GameQueue.QueueSupervisor, []},
+      # starting user registry
+      {Registry, keys: :unique, name: Gameplatform.UserRegistry},
+      # Start the user process supervisor
+      Gameplatform.Users.UserSupervisor,
+      # starting game registry
       {Registry, keys: :unique, name: Gameplatform.GameRegistry},
       {Gameplatform.Runtime.GameSupervisor, []}
     ]

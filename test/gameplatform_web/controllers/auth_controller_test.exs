@@ -1,7 +1,7 @@
 defmodule GameplatformWeb.AuthControllerTest do
   use GameplatformWeb.ConnCase, async: true
 
-  alias Gameplatform.Test.Support.Helpers.AuthHelper
+  alias Gameplatform.Test.Support.Helpers.Helper
 
   import Mox
 
@@ -10,7 +10,7 @@ defmodule GameplatformWeb.AuthControllerTest do
   describe "test for getOtp request" do
     setup %{conn: conn} do
       path = Routes.auth_path(conn, :get_otp)
-      phone = AuthHelper.get_random_mobile_no()
+      phone = Helper.get_random_mobile_no()
       {:ok, %{path: path, phone: phone}}
     end
 
@@ -66,7 +66,7 @@ defmodule GameplatformWeb.AuthControllerTest do
   describe "tests for submit otp" do
     setup %{conn: conn} do
       path = Routes.auth_path(conn, :submit_otp)
-      phone = AuthHelper.get_random_mobile_no()
+      phone = Helper.get_random_mobile_no()
       {:ok, %{path: path, phone: phone}}
     end
 
@@ -138,23 +138,23 @@ defmodule GameplatformWeb.AuthControllerTest do
 
       json_response = send_request(conn, get_path, 200, get_body_params)
 
-      otp = json_response["otp"]
+      assert json_response["status_code"] == "OK"
+
+      otp = json_response["message"]["otp"]
 
       submit_body_params = %{"phone_number" => phone, "country_code" => "+91", "otp" => otp}
 
-      assert token_cookie =
-               conn
-               |> put_req_header("content-type", "application/json")
-               |> post(submit_path, submit_body_params)
-               |> get_cookie_from_conn("_gameplatform_web_user_token")
+      assert submit_json_response = send_request(conn, submit_path, 200, submit_body_params)
 
-      assert token_cookie != nil
+      assert submit_json_response["status_code"] == "OK"
+
+      assert submit_json_response["data"]["token"] != nil
     end
   end
 
   # describe "tests for logout user" do
   #   setup _ do
-  #     phone = AuthHelper.get_random_mobile_no()
+  #     phone = Helper.get_random_mobile_no()
   #     {:ok, %{phone: phone}}
   #   end
 

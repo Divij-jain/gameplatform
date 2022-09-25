@@ -1,4 +1,5 @@
 defmodule Gameplatform.Accounts.Changesets.UserWallet do
+  @moduledoc false
   import Ecto.Changeset
 
   alias Gameplatform.Accounts.Schema.UserWallet

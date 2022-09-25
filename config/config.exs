@@ -10,6 +10,10 @@ import Config
 config :gameplatform,
   ecto_repos: [Gameplatform.Repo]
 
+config :gameplatform, Gameplatform.Repo,
+  migration_primary_key: [name: :id, type: :uuid],
+  migration_foreign_key: [column: :id, type: :uuid]
+
 # Configures the endpoint
 config :gameplatform, GameplatformWeb.Endpoint,
   url: [host: "localhost"],
@@ -71,6 +75,14 @@ config :gameplatform, Gameplatform.UserNotifier.TextMessage,
   client: Gameplatform.Client.TwilioClient
 
 config :opentelemetry, :resource, service: %{name: "gameplatform"}
+
+config :gameplatform, Gameplatform.ApiToConfig,
+  wallet_type_1: "user_wallet",
+  wallet_type_2: "promotional_wallet"
+
+config :gameplatform, GameplatformWeb.ApiToConfig,
+  socket_identifier: "user_socket_",
+  channel_prefix: "main_app:user:"
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

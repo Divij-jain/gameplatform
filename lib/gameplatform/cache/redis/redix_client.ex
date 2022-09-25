@@ -14,6 +14,9 @@ defmodule Gameplatform.Cache.Redis.RedixClient do
 
   def delete_value_from_cache(key), do: command(["DEL", key])
 
+  @spec command(command :: any()) ::
+          {:ok, Redix.Protocol.redis_value()}
+          | {:error, atom | Redix.Error.t() | Redix.ConnectionError.t()}
   def command(command) do
     Redix.command(:"redix_#{random_index()}", command)
   end

@@ -4,6 +4,8 @@ defmodule Gameplatform.Client.TwilioClient do
   """
   use Tesla
 
+  require Logger
+
   @callback send_sms(String.t(), String.t()) :: {:ok, map()} | {:error, any()}
 
   plug Tesla.Middleware.FollowRedirects
@@ -23,6 +25,12 @@ defmodule Gameplatform.Client.TwilioClient do
       "Body" => message,
       "MessagingServiceSid" => config(:messaging_service_sid)
     }
+
+    if Mix.env() in [:test, :dev] do
+      Logger.error("this should not be printed in test and dev environment")
+    else
+      :ok
+    end
 
     "/Messages.json"
     |> post(body)

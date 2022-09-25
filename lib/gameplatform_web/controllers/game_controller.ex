@@ -4,7 +4,7 @@ defmodule GameplatformWeb.GameController do
   import OpenApiSpex.Operation, only: [response: 3]
 
   alias Gameplatform.Game
-  alias GameplatformWeb.ApiSpec.Schema
+  alias Gameplatform.ApiSpec.Schema
   alias GameplatformWeb.Utils
   alias OpenApiSpex.Operation
 

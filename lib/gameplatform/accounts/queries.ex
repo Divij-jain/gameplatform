@@ -22,7 +22,7 @@ defmodule Gameplatform.Accounts.Queries do
       left_join: tx in UserWalletTx,
       on: wallet.id == tx.user_wallet_id,
       preload: [
-        user_profiles: {profile, user_wallets: {wallet, user_wallet_txs: tx}}
+        user_profile: {profile, user_wallets: {wallet, user_wallet_txs: tx}}
       ]
     )
   end

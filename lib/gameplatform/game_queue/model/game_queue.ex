@@ -7,7 +7,7 @@ defmodule Gameplatform.GameQueue.Model.GameQueue do
 
   defstruct [:users, :game_id, :app_id, :sku_code, :amount, :req_num_players]
 
-  @type t :: %__MODULE__{
+  @type t() :: %__MODULE__{
           users: list(),
           game_id: String.t(),
           app_id: String.t(),

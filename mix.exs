@@ -26,7 +26,9 @@ defmodule Gameplatform.MixProject do
 
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_), do: ["lib"]
+  # originial
+  # defp elixirc_paths(_), do: ["lib"]
+  defp elixirc_paths(_), do: ["lib", "test/support"]
 
   # Specifies your project dependencies.
   #
@@ -51,6 +53,7 @@ defmodule Gameplatform.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:tesla, "~> 1.4.0"},
       {:mox, "~> 1.0", only: :test},
+      {:mimic, "~> 1.7", only: :test},
       {:redix, "~> 1.1"},
       {:nimble_totp, "~> 0.1.0"},
       {:joken, "~> 2.4"},
@@ -65,7 +68,9 @@ defmodule Gameplatform.MixProject do
       {:opentelemetry_ecto, "~> 1.0.0-rc"},
       {:opentelemetry_phoenix, "~> 1.0.0-rc"},
       {:opentelemetry_logger_metadata, "~> 0.1.0-rc"},
-      {:opentelemetry_redix, "~> 0.1"}
+      {:opentelemetry_redix, "~> 0.1"},
+      # exmachina for factories
+      {:ex_machina, "~> 2.7.0"}
     ]
   end
 

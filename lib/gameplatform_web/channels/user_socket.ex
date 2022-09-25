@@ -5,24 +5,47 @@ defmodule GameplatformWeb.UserSocket do
 
   use Phoenix.Socket
 
+  require Logger
+
   channel "main_app:user:*", GameplatformWeb.MainAppChannel
 
   alias Gameplatform.Auth.Token.TokenClient
+  alias GameplatformWeb.ApiToConfig
 
   @impl true
-  def connect(%{"token" => token} = params, socket, _connect_info) do
-    IO.inspect(params)
+  def connect(%{"token" => token} = _params, socket, _connect_info) do
+    token = get_decoded_value(token)
 
-    case TokenClient.get_user_id_by_jwt_token(Jason.decode!(token)) do
+    case verify_token(token) do
+      {:ok, user_id} ->
+        socket = assign(socket, :user_id, user_id)
+        {:ok, socket}
+
       nil ->
-        IO.inspect("here")
         :error
-
-      user_id ->
-        {:ok, assign(socket, :user_id, user_id)}
     end
   end
 
+  def connect(_, _socket, _) do
+    Logger.error("#{__MODULE__} connect error missing params")
+    :error
+  end
+
   @impl true
-  def id(_socket), do: nil
+  def id(%{assigns: %{user_id: user_id}} = _socket) do
+    socket_id = ApiToConfig.socket_id()
+    socket_id <> user_id
+  end
+
+  defp verify_token(token), do: TokenClient.get_user_id_by_jwt_token(token)
+
+  def get_decoded_value(value) do
+    case Jason.decode(value) do
+      {:ok, value} ->
+        value
+
+      {:error, %Jason.DecodeError{}} ->
+        value
+    end
+  end
 end

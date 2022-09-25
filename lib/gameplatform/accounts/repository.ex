@@ -4,14 +4,16 @@ defmodule Gameplatform.Accounts.Repository do
   """
   alias Gameplatform.Repo
   alias Gameplatform.Accounts.Changesets
-  alias Gameplatform.Accounts.Schema.{User, UserWalletTx}
+  alias Gameplatform.Accounts.Schema.{User, UserWallet, UserWalletTx}
   alias Gameplatform.Accounts.Queries
   alias Gameplatform.Ecto.ChangesetErrorTranslator
 
+  @spec get_user_by_phone_number(String.t()) :: User.t() | nil
   def get_user_by_phone_number(phone_number) do
     Repo.get_by(User, phone_number: phone_number)
   end
 
+  @spec get_user(Ecto.UUID.t()) :: {:ok, User.t() | nil}
   def get_user(user_id) do
     user_id
     |> Queries.user_query()
@@ -19,16 +21,29 @@ defmodule Gameplatform.Accounts.Repository do
     |> handle_result()
   end
 
+  @spec get_wallet_balance(Ecto.UUID.t()) :: {:ok, Decimal.t()}
   def get_wallet_balance(wallet_id) do
     UserWalletTx
     |> Queries.match_user_wallet_id(wallet_id)
     |> Repo.aggregate(:sum, :amount)
     |> case do
       nil ->
-        Decimal.new(0)
+        {:ok, Decimal.new(0)}
 
       balance ->
-        balance
+        {:ok, balance}
+    end
+  end
+
+  @spec get_wallet(wallet_id :: Ecto.UUID.t()) ::
+          {:ok, UserWallet.t()} | {:error, :does_not_exisit}
+  def get_wallet(wallet_id) do
+    case Repo.get(UserWallet, wallet_id) do
+      nil ->
+        {:error, :does_not_exisit}
+
+      wallet ->
+        {:ok, wallet}
     end
   end
 
@@ -50,10 +65,12 @@ defmodule Gameplatform.Accounts.Repository do
     |> Repo.insert()
   end
 
+  @spec create_wallet_tx(map()) :: {:ok, UserWalletTx} | {:error, any()}
   def create_wallet_tx(attrs) do
     attrs
     |> Changesets.UserWalletTx.build()
     |> Repo.insert()
+    |> handle_result()
   end
 
   defp handle_result({:ok, result}), do: {:ok, result}

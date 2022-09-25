@@ -1,4 +1,5 @@
 defmodule Gameplatform.Game do
+  @moduledoc false
   alias Gameplatform.Games.Repository, as: Repo
 
   def get_active_games() do
