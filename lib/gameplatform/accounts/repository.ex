@@ -4,7 +4,7 @@ defmodule Gameplatform.Accounts.Repository do
   """
   alias Gameplatform.Repo
   alias Gameplatform.Accounts.Changesets
-  alias Gameplatform.Accounts.Schema.{User, UserWallet, UserWalletTx}
+  alias Gameplatform.Accounts.Schema.{User, UserWallet, UserWalletTx, ReferralCode}
   alias Gameplatform.Accounts.Queries
   alias Gameplatform.Ecto.ChangesetErrorTranslator
 
@@ -47,6 +47,11 @@ defmodule Gameplatform.Accounts.Repository do
     end
   end
 
+  @spec get_referral_code_by_profile_id(profile_id :: Ecto.UUID.t()) :: ReferralCode.t() | nil
+  def get_referral_code_by_profile_id(profile_id) do
+    Repo.get_by(ReferralCode, user_profile_id: profile_id)
+  end
+
   def create_new_user(attrs) do
     attrs
     |> Changesets.User.build()
@@ -65,10 +70,18 @@ defmodule Gameplatform.Accounts.Repository do
     |> Repo.insert()
   end
 
-  @spec create_wallet_tx(map()) :: {:ok, UserWalletTx} | {:error, any()}
+  @spec create_wallet_tx(map()) :: {:ok, UserWalletTx.t()} | {:error, any()}
   def create_wallet_tx(attrs) do
     attrs
     |> Changesets.UserWalletTx.build()
+    |> Repo.insert()
+    |> handle_result()
+  end
+
+  @spec create_referral_code(map()) :: {:ok, ReferralCode.t()} | {:error, any()}
+  def create_referral_code(attrs) do
+    attrs
+    |> Changesets.ReferralCode.build()
     |> Repo.insert()
     |> handle_result()
   end

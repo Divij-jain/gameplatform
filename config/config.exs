@@ -78,7 +78,8 @@ config :opentelemetry, :resource, service: %{name: "gameplatform"}
 
 config :gameplatform, Gameplatform.ApiToConfig,
   wallet_type_1: "user_wallet",
-  wallet_type_2: "promotional_wallet"
+  wallet_type_2: "promotional_wallet",
+  referral_code_length: 8
 
 config :gameplatform, GameplatformWeb.ApiToConfig,
   socket_identifier: "user_socket_",

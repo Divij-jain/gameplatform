@@ -5,7 +5,7 @@ defmodule Gameplatform.Factories.UserFactory do
   """
 
   alias Gameplatform.ApiToConfig
-  alias Gameplatform.Accounts.Schema.{User, UserProfile, UserWallet, UserWalletTx}
+  alias Gameplatform.Accounts.Schema.{User, UserProfile, UserWallet, UserWalletTx, ReferralCode}
   alias Gameplatform.Test.Support.Helpers.Helper
 
   defmacro __using__(_opts) do
@@ -29,9 +29,11 @@ defmodule Gameplatform.Factories.UserFactory do
       def user_profile_factory do
         now_time = DateTime.utc_now()
         id = Ecto.UUID.generate()
+        unique_id = Helper.unique_id()
 
         %UserProfile{
           id: id,
+          unique_id: unique_id,
           phone_number: Helper.get_random_mobile_no(),
           email: sequence(:email, &"email-#{&1}@example.com"),
           first_name: sequence("gandalf"),
@@ -76,6 +78,19 @@ defmodule Gameplatform.Factories.UserFactory do
           inserted_at: now_time,
           updated_at: now_time,
           user_wallet_id: nil
+        }
+      end
+
+      def referral_factory do
+        now_time = DateTime.utc_now()
+
+        %ReferralCode{
+          id: Ecto.UUID.generate(),
+          user_profile_id: nil,
+          referral_code: "",
+          active: true,
+          inserted_at: now_time,
+          updated_at: now_time
         }
       end
     end

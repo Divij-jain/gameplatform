@@ -33,6 +33,8 @@ defmodule Gameplatform.AccountTest do
       {:ok, %User{} = user} = Account.create_new_user(params)
       assert_created_user(user, params)
     end
+
+    test "referral_code"
   end
 
   describe "get_complete_user/1" do

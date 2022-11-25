@@ -2,8 +2,9 @@ defmodule Gameplatform.Accounts.RepositoryTest do
   use Gameplatform.DataCase
 
   alias Gameplatform.Accounts.Repository
-  alias Gameplatform.Accounts.Schema.User
+  alias Gameplatform.Accounts.Schema.{User, ReferralCode}
   alias Gameplatform.Test.Support.Helpers.Helper
+  alias Gameplatform.Utils
 
   import Gameplatform.Factory
 
@@ -52,6 +53,15 @@ defmodule Gameplatform.Accounts.RepositoryTest do
 
     test "create_new_user/1", attrs do
       {:ok, %User{} = _user} = Repository.create_new_user(attrs)
+    end
+  end
+
+  describe "create_referral_code/1" do
+    test "creating suceeds" do
+      user = insert(:user)
+      referral_code = Utils.create_referral_code(user.user_profile.unique_id)
+      attrs = %{user_profile_id: user.user_profile.id, referral_code: referral_code}
+      assert {:ok, %ReferralCode{}} = Repository.create_referral_code(attrs)
     end
   end
 end

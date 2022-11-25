@@ -17,6 +17,7 @@ defmodule Gameplatform.Repo.Migrations.CreateUserProfileTable do
   defp create_user_profile_table do
     create_if_not_exists table("user_profiles") do
       add :user_id, references("users"), null: false
+      add :unique_id, :serial, null: false
       add :phone_number, :string, null: false
       add :email, :string
       add :first_name, :string

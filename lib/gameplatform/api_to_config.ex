@@ -8,4 +8,6 @@ defmodule Gameplatform.ApiToConfig do
   def get_wallet_type_1, do: Keyword.fetch!(@compile_config, :wallet_type_1)
 
   def get_wallet_type_2, do: Keyword.fetch!(@compile_config, :wallet_type_2)
+
+  def get_value, do: Keyword.fetch!(@compile_config, :referral_code_length)
 end

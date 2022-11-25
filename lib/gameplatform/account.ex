@@ -3,6 +3,7 @@ defmodule Gameplatform.Account do
   alias Gameplatform.Accounts.Schema.{User, UserWalletTx}
   alias Gameplatform.ApiSpec.Schema.SubmitOtpRequest
   alias Gameplatform.Ecto.ChangesetErrorTranslator
+  alias Gameplatform.Utils
 
   @spec get_current_user(SubmitOtpRequest.t()) :: {:ok, User.t()} | {:error, map()}
   def get_current_user(attrs) do
@@ -29,6 +30,12 @@ defmodule Gameplatform.Account do
                                                %{create_user_profile: user_profile} = _changes ->
       attrs = Map.put(attrs, :user_profile_id, user_profile.id)
       create_user_wallets(attrs)
+    end)
+    |> Ecto.Multi.run(:create_referral_code, fn _repo,
+                                                %{create_user_profile: user_profile} = _changes ->
+      referral_code = Utils.create_referral_code(user_profile.unique_id)
+      attrs = Map.new(user_profile_id: user_profile.id, referral_code: referral_code)
+      Repo.create_referral_code(attrs)
     end)
     |> Gameplatform.Repo.transaction()
     |> case do

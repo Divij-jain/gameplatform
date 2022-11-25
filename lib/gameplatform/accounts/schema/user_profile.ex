@@ -7,6 +7,7 @@ defmodule Gameplatform.Accounts.Schema.UserProfile do
 
   @type t() :: %__MODULE__{
           id: Ecto.UUID.t(),
+          unique_id: :integer,
           phone_number: String.t(),
           email: String.t(),
           first_name: String.t(),
@@ -21,6 +22,7 @@ defmodule Gameplatform.Accounts.Schema.UserProfile do
         }
 
   schema "user_profiles" do
+    field :unique_id, :integer
     field :phone_number, :string
     field :email, :string
     field :first_name, :string
