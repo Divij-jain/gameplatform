@@ -32,6 +32,9 @@ reset_test: start_db_services
 start_db_services:
 	@docker compose up -d --wait db redis
 
+start_all_services:
+	@docker compose up -d --wait db redis grafana tempo
+
 stop: 
 	@docker compose down || exit 0
 	@docker compose kill || exit 0

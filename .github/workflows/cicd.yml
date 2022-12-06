@@ -1,4 +1,4 @@
-name: Gyantrade CI/CD
+name: Gameplatform CI/CD
 
 on:
   - push
