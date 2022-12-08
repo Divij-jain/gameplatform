@@ -70,7 +70,8 @@ defmodule Gameplatform.MixProject do
       {:opentelemetry_logger_metadata, "~> 0.1.0-rc"},
       {:opentelemetry_redix, "~> 0.1"},
       # exmachina for factories
-      {:ex_machina, "~> 2.7.0"}
+      {:ex_machina, "~> 2.7.0"},
+      {:telemetry_metrics_statsd, "~> 0.6.0"}
     ]
   end
 
